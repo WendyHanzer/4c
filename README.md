@@ -1,4 +1,6 @@
 cs480coulton
 ============
 
-Assignments for Graphics
+Assignments for Graphics cs480 fall '14
+
+Charles Nathan Coulton
