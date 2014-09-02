@@ -1,16 +1,19 @@
 #include <GL/glew.h> // glew must be included before the main gl libs
 #include <GL/glut.h> // doing otherwise causes compiler shouting
 #include <iostream>
+#include <fstream>
+#include <stdio.h>
 #include <chrono>
+#include <math.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
-
+using namespace std;
 
 //--Data types
 //This object will define the attributes of a vertex(position, color, etc...)
-struct Vertex
+struct Vertex //https://github.com/ccoulton/cs480coulton.git
 {
     GLfloat position[3];
     GLfloat color[3];
@@ -49,6 +52,9 @@ void cleanUp();
 float getDT();
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 
+const char *shaderloader(char *input);
+
+float Rotate(float radians);
 
 //--Main
 int main(int argc, char **argv)
@@ -58,7 +64,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(w, h);
     // Name and create the Window
-    glutCreateWindow("Matrix Example");
+    glutCreateWindow("Assignment01");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -140,10 +146,14 @@ void update()
 {
     //total time
     static float angle = 0.0;
+    static float turn  = 0.0;
     float dt = getDT();// if you have anything moving, use dt.
-
     angle += dt * M_PI/2; //move through 90 degrees a second
-    model = glm::translate( glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
+    turn  += dt * M_PI*45;
+    //Rotate(3.14);
+    
+    model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
+    model = glm::rotate(model,turn , glm::vec3(0.0,1.0,0.0));
     // Update the state of the scene
     glutPostRedisplay();//call the display callback
 }
@@ -237,21 +247,15 @@ bool initialize()
     //Shader Sources
     // Put these into files and write a loader in the future
     // Note the added uniform!
-    const char *vs =
-        "attribute vec3 v_position;"
-        "attribute vec3 v_color;"
-        "varying vec3 color;"
-        "uniform mat4 mvpMatrix;"
-        "void main(void){"
-        "   gl_Position = mvpMatrix * vec4(v_position, 1.0);"
-        "   color = v_color;"
-        "}";
-
-    const char *fs =
-        "varying vec3 color;"
-        "void main(void){"
-        "   gl_FragColor = vec4(color.rgb, 1.0);"
-        "}";
+    char infile [12] = "shadervs.cg";
+    //cout<<shaderloader(infile)<<endl;
+    const char *vs = shaderloader(infile);
+    //"attribute vec3 v_position;attribute vec3 v_color;varying vec3 color;uniform mat4 mvpMatrix;void main(void){   gl_Position = mvpMatrix * vec4(v_position, 1.0);   color = v_color;}";
+	infile[6] = 'f';
+    const char *fs = shaderloader(infile);/*"varying vec3 color;"
+      "void main(void){"
+      "   gl_FragColor = vec4(color.rgb, 1.0);"
+      "}";*/
 
     //compile the shaders
     GLint shader_status;
@@ -276,7 +280,7 @@ bool initialize()
     {
         std::cerr << "[F] FAILED TO COMPILE FRAGMENT SHADER!" << std::endl;
         return false;
-    }
+    } //sed to store and transform them. 
 
     //Now we link the 2 shader objects into a program
     //This program is what is run on the GPU
@@ -294,8 +298,7 @@ bool initialize()
 
     //Now we set the locations of the attributes and uniforms
     //this allows us to access them easily while rendering
-    loc_position = glGetAttribLocation(program,
-                    const_cast<const char*>("v_position"));
+    loc_position = glGetAttribLocation(program, /*sed to store and transform them.*/  const_cast<const char*>("v_position"));
     if(loc_position == -1)
     {
         std::cerr << "[F] POSITION NOT FOUND" << std::endl;
@@ -355,3 +358,48 @@ float getDT()
     t1 = std::chrono::high_resolution_clock::now();
     return ret;
 }
+//Loads shader definations in from files
+const char *shaderloader(char *input){
+	FILE* infile = fopen(input, "rb");   //Open file
+  	if(fseek(infile, 0, SEEK_END) == -1) return NULL;
+  	long size = ftell(infile);			//get file size
+  	if(fseek(infile, 0, SEEK_SET) == -1) return NULL;
+  	char *shader = (char*) malloc( (size_t) size +1  ); 
+ 
+  	fread(shader, 1, (size_t)size, infile); //read from file into shader
+  	if(ferror(infile)) {
+    	free(shader);
+    	return NULL;
+  		}
+ 
+  	fclose(infile);
+  	shader[size] = '\0';
+  	return shader;
+	/*ifstream infile;
+	infile.open(filename);
+	char *shader = (char*) malloc((size_t) infile.gcout());
+	if (!infile.is_open())
+		cout<<"Error Opening file"<<endl;
+	else{
+		cout<<"File opened"<<endl;
+		while(infile.good()){
+			infile.read(shader, infile.gcout());
+			}
+		}
+	shader[strlen(shader)] = '\0';
+	const char *output = shader;
+	infile.close();
+	return(output);*/
+	}
+//total rotate = rotx*yawy*pitchz
+float Rotate(float radians){
+/* centerpos.x - pointx = calcx
+   centerpos.y - pointy = calcy
+   transx = calcx*cos(radians)-calcy*sin(radians)
+   transy = calcy*cos(radians)+calcy*sin(radians)
+   newx = centerpos.x + transx
+   newy = centerpos.y + transy
+   already part of the GLM libs! yay!*/
+   return(0.0);
+   }
+
