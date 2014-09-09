@@ -24,7 +24,7 @@ struct Vertex //https://github.com/ccoulton/cs480coulton.git
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
-
+float isRotate = 0.0;
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 
@@ -43,6 +43,9 @@ void render();
 void update();
 void reshape(int n_w, int n_h);
 void keyboard(unsigned char key, int x_pos, int y_pos);
+void mouse(int button, int state, int x, int y);
+void Rotation_menu(int id);
+void top_menu(int id);
 
 //--Resource management
 bool initialize();
@@ -64,8 +67,8 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(w, h);
     // Name and create the Window
-    glutCreateWindow("Assignment01");
-
+    glutCreateWindow("Assignment02");
+	
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
     GLenum status = glewInit();
@@ -81,7 +84,18 @@ int main(int argc, char **argv)
     glutReshapeFunc(reshape);// Called if the window is resized
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
-
+	glutMouseFunc(mouse);//Called if there is mouse input
+	//glutCreateMenu(Menu);
+	int sub_menu = glutCreateMenu(Rotation_menu);
+	glutAddMenuEntry("Start CCW Rotation", 1);
+	glutAddMenuEntry("Start CLW Rotation", 2);
+	glutAddMenuEntry("Stop Rotation", 3);
+	glutCreateMenu(top_menu);
+	glutAddSubMenu("Rotation options", sub_menu);
+	glutAddMenuEntry("Quit", 2);
+	//sub_menu = glut
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+	
     // Initialize all of our resources(shaders, geometry)
     bool init = initialize();
     if(init)
@@ -149,7 +163,7 @@ void update()
     static float turn  = 0.0;
     float dt = getDT();// if you have anything moving, use dt.
     angle += dt * M_PI/2; //move through 90 degrees a second
-    turn  += dt * M_PI*45;
+    turn  += dt * M_PI*isRotate;
     //Rotate(3.14);
     
     model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
@@ -174,12 +188,72 @@ void reshape(int n_w, int n_h)
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
     // Handle keyboard input
-    if(key == 27)//ESC
-    {
+    if((key == 27)||(key == 'q')||(key == 'Q'))//ESC
         exit(0);
-    }
+    else if ((key == 'm')||(key == 'M')) //menu
+    	Rotation_menu(1);
+    else if ((key == 'a')||(key == 'A'))
+    	Rotation_menu(2);
+    else if ((key == 'z')||(key == 'Z'))
+    	Rotation_menu(3);
+    /*else if (key == 43){//increase speed
+    	cout<<"+ being hit"<<endl;
+    	cout<<isRotate<<endl;
+    	if	(isRotate >= 0.0)	//if already spinning CCW increase rate
+    		isRotate += 2.0;	//or if not spinning start CCW
+    	else//(isRotate < 0.0)	//if already spinning CLW increase rate
+    		isRotate -= 2.0;
+    	}
+    else if (key == 45){
+    	if 	(isRotate < 0.0)	//if spinning CLW decrease speed
+    		isRotate += 2.0;	
+    	else//(isRotate > 0.0) //if spinning CCW decrease speed
+    		isRotate -= 2.0;	//or if not spinning start CLW
+    	}//decrease speed*/ //BLARG doesn't allow me to grab it + and -
 }
 
+void mouse(int button, int state, int x, int y){
+	//Mouse handler
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+		{ //what does left button do?
+		sleep(0);
+		}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+		{ //what does right button do?
+		sleep(0);
+		}
+	}
+
+void Rotation_menu(int id){
+	switch(id)
+		{
+		case 1: //ccw rotate
+			isRotate = 45.0;
+			break;
+		case 2: //clw rotate
+			isRotate =-45.0;
+			break;
+		case 3: //stop rotate
+			isRotate = 0.0;
+			break;
+		}
+	glutPostRedisplay();
+	}
+	
+void top_menu(int id){
+	switch (id)
+		{
+		case 1:
+			Rotation_menu(id);
+			break;
+		case 2:
+			exit(0);
+			break;
+		}
+	glutPostRedisplay();
+	}
+	
+			
 bool initialize()
 {
     // Initialize basic geometry and shaders for this example
@@ -245,17 +319,12 @@ bool initialize()
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
     //Shader Sources
-    // Put these into files and write a loader in the future
+    //TODO: make shader into a class so you can init and make stored shaders
     // Note the added uniform!
     char infile [12] = "shadervs.cg";
-    //cout<<shaderloader(infile)<<endl;
     const char *vs = shaderloader(infile);
-    //"attribute vec3 v_position;attribute vec3 v_color;varying vec3 color;uniform mat4 mvpMatrix;void main(void){   gl_Position = mvpMatrix * vec4(v_position, 1.0);   color = v_color;}";
 	infile[6] = 'f';
-    const char *fs = shaderloader(infile);/*"varying vec3 color;"
-      "void main(void){"
-      "   gl_FragColor = vec4(color.rgb, 1.0);"
-      "}";*/
+    const char *fs = shaderloader(infile);
 
     //compile the shaders
     GLint shader_status;
