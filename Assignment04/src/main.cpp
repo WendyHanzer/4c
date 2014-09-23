@@ -244,6 +244,7 @@ bool initialize(int argc, char **argv)
 {
     // Initialize basic geometry and shaders for this example
 	Object OBJ = modelLoader(argv[3]);
+	cout<<OBJ.NumVert;
 	NumToRender = OBJ.NumVert;//
     // Create a Vertex Buffer object to store this vertex info on the GPU*/
     glGenBuffers(1, &vbo_geometry);
@@ -438,6 +439,7 @@ Object modelLoader(char *objName)
 	Output.name = new char[50];
 	Output.Geo = new Vertex[3*NumFaces];
 	Output.NumVert = 3*NumFaces;
+	
 	NumFaces = NumVert = 0;
 	while(infile.good()){
 		infile>>linetest;
@@ -465,9 +467,14 @@ Object modelLoader(char *objName)
 			break;
 			}
 		}
-	/*for(unsigned int i=0; i<NumFaces; i++){
+	/*cout<<NumVert<<endl;
+	cout<<NumFaces<<endl;
+	cout<<Output.NumVert<<endl;
+	for(unsigned int i=0; i<NumFaces; i++){
 		for(int j=0; j<=2; j++)
-			cout<<Geo[i].position[j];//*/
+			cout<<Output.Geo[i].position[j];
+		cout<<endl;
+		}//*/
 	//cout<<NumFaces;
 	infile.close();
 	return(Output);
