@@ -18,13 +18,7 @@ struct Vertex //https://github.com/ccoulton/cs480coulton.git
     GLfloat position[3];
     GLfloat color[3];
 };
-struct VertNode
-{
-	Vertex data;
-	int index;
-	VertNode *next;
-	VertNode *prev;
-};
+
 //--Evil Global variables
 //Just for this example!
 int w = 640, h = 480;// Window size
@@ -154,7 +148,7 @@ void render()
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,color));
 	//draw first obj
-    glDrawArrays(GL_TRIANGLES, 0, 36);//mode, starting index, count
+    glDrawArrays(GL_TRIANGLES, 0, 195);//mode, starting index, count
 	
     //clean up
     glDisableVertexAttribArray(loc_position);
@@ -173,8 +167,8 @@ void update()
     angle += dt * M_PI/2; //move through 90 degrees a second
     turn  += dt * M_PI*isRotate;
     
-    //model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
-    //model = glm::rotate(model,turn , glm::vec3(0.0,1.0,0.0));
+    model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
+    model = glm::rotate(model,turn , glm::vec3(0.0,1.0,0.0));
     // Update the state of the scene
     glutPostRedisplay();//call the display callback
 }
@@ -240,13 +234,12 @@ void top_menu(int id){
 	glutPostRedisplay();
 	}
 	
-			
 bool initialize(int argc, char **argv)
 {
     // Initialize basic geometry and shaders for this example
-	/*Vertex *geometry = modelLoader(argv[3]);
-	cout<<geometry[0].position[0]<<endl;//*/
-	Vertex geometry [] = /*Geo; //*/
+	Vertex *Geo = modelLoader(argv[3]);//
+	//Vertex Geometry [] ={ Retvert(Geo, 0)};
+	/*Vertex geometry [] = //Geo; //
 						{ {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
                           {{-1.0, -1.0, 1.0}, {0.0, 0.0, 1.0}},
                           {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
@@ -294,11 +287,13 @@ bool initialize(int argc, char **argv)
                           {{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}},
                           {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
                           {{1.0, -1.0, 1.0}, {1.0, 0.0, 1.0}}
-                        };//*/
+                        };//*/ //size = vertex 24 * elements *36 or 824
+    //cout<<sizeof(Geometry);
+    //cout<<sizeof(geometry);
     // Create a Vertex Buffer object to store this vertex info on the GPU*/
     glGenBuffers(1, &vbo_geometry);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(geometry), &geometry, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 195*24, Geo, GL_STATIC_DRAW);
     //--Geometry done*/
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -376,7 +371,7 @@ bool initialize(int argc, char **argv)
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 20.0, -32.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 10.0, -16.0), //Eye Position
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Z is up
 
@@ -498,7 +493,7 @@ Vertex *modelLoader(char *objName)
 			break;
 			case 'v':
 			infile>>xyz[0]>>xyz[1]>>xyz[2];
-			Vertices[NumVert] = {{xyz[0],xyz[1],xyz[2]},{1.0,1.0,1.0}}; 
+			Vertices[NumVert] = {{xyz[0],xyz[1],xyz[2]},{0.0,0.0,0.0}}; 
 			NumVert++; //incerment the index of which vert is stored
 			break;
 			case 'f':  //get faces and insert into geometry
@@ -511,7 +506,12 @@ Vertex *modelLoader(char *objName)
 			break;
 			}
 		}
+	/*for(unsigned int i=0; i<NumFaces; i++){
+		for(int j=0; j<=2; j++)
+			cout<<Geo[i].position[j];//*/
+	cout<<NumFaces;
 	infile.close();
-	cout<<Geo[0].position[0]<<endl;
 	return(Geo);
 	}
+
+
