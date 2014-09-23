@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 	glutAddMenuEntry("Quit", 2);
 	//sub_menu = glut
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	
+	srand(getDT());
     // Initialize all of our resources(shaders, geometry)
     bool init = initialize(argc, argv);
     if(init)
@@ -148,7 +148,7 @@ void render()
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,color));
 	//draw first obj
-    glDrawArrays(GL_TRIANGLES, 0, 195);//mode, starting index, count
+    glDrawArrays(GL_TRIANGLES, 0, 2613921);//mode, starting index, count
 	
     //clean up
     glDisableVertexAttribArray(loc_position);
@@ -238,62 +238,10 @@ bool initialize(int argc, char **argv)
 {
     // Initialize basic geometry and shaders for this example
 	Vertex *Geo = modelLoader(argv[3]);//
-	//Vertex Geometry [] ={ Retvert(Geo, 0)};
-	/*Vertex geometry [] = //Geo; //
-						{ {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
-                          {{-1.0, -1.0, 1.0}, {0.0, 0.0, 1.0}},
-                          {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
-
-                          {{1.0, 1.0, -1.0}, {1.0, 1.0, 0.0}},
-                          {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
-                          {{-1.0, 1.0, -1.0}, {0.0, 1.0, 0.0}},
-                          
-                          {{1.0, -1.0, 1.0}, {1.0, 0.0, 1.0}},
-                          {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
-                          {{1.0, -1.0, -1.0}, {1.0, 0.0, 0.0}},
-                          
-                          {{1.0, 1.0, -1.0}, {1.0, 1.0, 0.0}},
-                          {{1.0, -1.0, -1.0}, {1.0, 0.0, 0.0}},
-                          {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
-
-                          {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
-                          {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
-                          {{-1.0, 1.0, -1.0}, {0.0, 1.0, 0.0}},
-
-                          {{1.0, -1.0, 1.0}, {1.0, 0.0, 1.0}},
-                          {{-1.0, -1.0, 1.0}, {0.0, 0.0, 1.0}},
-                          {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
-
-                          {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
-                          {{-1.0, -1.0, 1.0}, {0.0, 0.0, 1.0}},
-                          {{1.0, -1.0, 1.0}, {1.0, 0.0, 1.0}},
-                          
-                          {{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}},
-                          {{1.0, -1.0, -1.0}, {1.0, 0.0, 0.0}},
-                          {{1.0, 1.0, -1.0}, {1.0, 1.0, 0.0}},
-
-                          {{1.0, -1.0, -1.0}, {1.0, 0.0, 0.0}},
-                          {{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}},
-                          {{1.0, -1.0, 1.0}, {1.0, 0.0, 1.0}},
-
-                          {{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}},
-                          {{1.0, 1.0, -1.0}, {1.0, 1.0, 0.0}},
-                          {{-1.0, 1.0, -1.0}, {0.0, 1.0, 0.0}},
-
-                          {{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}},
-                          {{-1.0, 1.0, -1.0}, {0.0, 1.0, 0.0}},
-                          {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
-
-                          {{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}},
-                          {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
-                          {{1.0, -1.0, 1.0}, {1.0, 0.0, 1.0}}
-                        };//*/ //size = vertex 24 * elements *36 or 824
-    //cout<<sizeof(Geometry);
-    //cout<<sizeof(geometry);
     // Create a Vertex Buffer object to store this vertex info on the GPU*/
     glGenBuffers(1, &vbo_geometry);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, 195*24, Geo, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 2613921*24, Geo, GL_STATIC_DRAW);
     //--Geometry done*/
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -493,7 +441,7 @@ Vertex *modelLoader(char *objName)
 			break;
 			case 'v':
 			infile>>xyz[0]>>xyz[1]>>xyz[2];
-			Vertices[NumVert] = {{xyz[0],xyz[1],xyz[2]},{0.0,0.0,0.0}}; 
+			Vertices[NumVert] = {{xyz[0],xyz[1],xyz[2]},{.2, 1.0, .8}}; 
 			NumVert++; //incerment the index of which vert is stored
 			break;
 			case 'f':  //get faces and insert into geometry
