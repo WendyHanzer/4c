@@ -23,6 +23,7 @@ struct VertNode
 	Vertex data;
 	int index;
 	VertNode *next;
+	VertNode *prev;
 };
 //--Evil Global variables
 //Just for this example!
@@ -57,8 +58,7 @@ void top_menu(int id);
 //--Resource management
 bool initialize(int argc, char **argv);
 void cleanUp();
-VertNode *modelLoader(char *input);
-void Geo_insert(VertNode *Vroot, VertNode *Geonode, int Index);
+Vertex *modelLoader(char *objName);
 
 //--Random time things
 float getDT();
@@ -173,8 +173,8 @@ void update()
     angle += dt * M_PI/2; //move through 90 degrees a second
     turn  += dt * M_PI*isRotate;
     
-    model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
-    model = glm::rotate(model,turn , glm::vec3(0.0,1.0,0.0));
+    //model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
+    //model = glm::rotate(model,turn , glm::vec3(0.0,1.0,0.0));
     // Update the state of the scene
     glutPostRedisplay();//call the display callback
 }
@@ -244,7 +244,10 @@ void top_menu(int id){
 bool initialize(int argc, char **argv)
 {
     // Initialize basic geometry and shaders for this example
-	Vertex geometry[] = { {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
+	/*Vertex *geometry = modelLoader(argv[3]);
+	cout<<geometry[0].position[0]<<endl;//*/
+	Vertex geometry [] = /*Geo; //*/
+						{ {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
                           {{-1.0, -1.0, 1.0}, {0.0, 0.0, 1.0}},
                           {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
 
@@ -292,12 +295,10 @@ bool initialize(int argc, char **argv)
                           {{-1.0, 1.0, 1.0}, {0.0, 1.0, 1.0}},
                           {{1.0, -1.0, 1.0}, {1.0, 0.0, 1.0}}
                         };//*/
-    modelLoader(argv[3]);
-  
     // Create a Vertex Buffer object to store this vertex info on the GPU*/
     glGenBuffers(1, &vbo_geometry);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(geometry), geometry, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(geometry), &geometry, GL_STATIC_DRAW);
     //--Geometry done*/
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -375,9 +376,9 @@ bool initialize(int argc, char **argv)
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 8.0, -16.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 20.0, -32.0), //Eye Position
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
-                        glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
+                        glm::vec3(0.0, 1.0, 0.0)); //Positive Z is up
 
     projection = glm::perspective( 45.0f, //the FoV typically 90 degrees is good which is what this is set to
                                    float(w)/float(h), //Aspect Ratio, so Circles stay Circular
@@ -444,95 +445,73 @@ const char *shaderloader(char *input){
 	return(output);*/
 	}
 
-VertNode *modelLoader(char *objName)
+Vertex *modelLoader(char *objName)
 	{
 	ifstream infile;
 	infile.open(objName);
-	float x, y, z;
-	int f1, f2, f3;
-	VertNode *Vertices = NULL;
-	VertNode *tempNode;
-	VertNode *root;
-	VertNode *Geo = NULL;
-	VertNode *GRoot = NULL;
-	tempNode = new VertNode;
-	GRoot = tempNode;
-	Geo = GRoot;
-	tempNode = new VertNode;
-	root = tempNode;
-	tempNode->next = NULL;
-	//int *Faces;
-	//Vertex *output;
+	float xyz[3];
+	int faces[3];
 	char linetest;
 	char linetxt[250];
-	unsigned int VertIndex, FaceIndex =0;
+	unsigned int NumVert, NumFaces = 0;
 	if (infile.is_open())
 		cout<<"File opened\n";
 	else
 		cout<<"Could not open\n";
-	while(infile.good())
-		{
+	//first pass to get number of vertices/faces since creating linked lists doesn't
+	//work to pass it back.
+	while(infile.good()){
 		infile>>linetest;
-		if (linetest == '#'){
+		switch(linetest){
+			case '#':
+			case 'o':
+			case 's':
+			case 'n':
 			infile.getline(linetxt, 250, '\n'); //get and ignore
-			}
-		else if (linetest == 'o'){ // get and ignore for now
+			break;
+			case 'v': //get vertecies and store
+			NumVert++;
 			infile.getline(linetxt, 250, '\n');
+			break;
+			case 'f':
+			NumFaces++;
+			infile.getline(linetxt, 250, '\n');
+			break;
 			}
-		else if (linetest == 'v'){  //get vertecies and store
-			infile>>x>>y>>z;
-			//cout<<x<<":"<<y<<":"<<z<<endl; 
-			tempNode->data = {{x,y,z},{0,0,0}};
-			tempNode->next = new VertNode;
-			Vertices = tempNode;
-			tempNode = Vertices->next;
-			VertIndex++; //incerment the index of which vert is stored
+		}
+	infile.close();  //have to close and reopen, rewinding does not work
+	infile.open(objName);
+	//Second pass to grab all the information and insert into the gemometry
+	Vertex *Vertices;
+	Vertices = new Vertex [NumVert];
+	Vertex *Geo;
+	Geo = new Vertex[3*NumFaces];
+	NumFaces = NumVert = 0;
+	while(infile.good()){
+		infile>>linetest;
+		switch(linetest){
+			case '#':
+			case 'o':
+			case 's':
+			case 'n':
+			infile.getline(linetxt, 250, '\n');
+			break;
+			case 'v':
+			infile>>xyz[0]>>xyz[1]>>xyz[2];
+			Vertices[NumVert] = {{xyz[0],xyz[1],xyz[2]},{1.0,1.0,1.0}}; 
+			NumVert++; //incerment the index of which vert is stored
+			break;
+			case 'f':  //get faces and insert into geometry
+			infile>>faces[0]>>faces[1]>>faces[2]; //get face points
+			for (int fIndex =0; fIndex <= 2; fIndex++){
+				Geo[NumFaces] = Vertices[faces[fIndex]-1];
+				//
+				NumFaces++;
+				}
+			break;
 			}
-		else if (linetest == 'f'){
-			infile>>f1>>f2>>f3; //get face points
-			Vertices = root;
-			for(int i = 1; i<f1; i++)
-				Vertices = Vertices->next;
-			Geo->data = Vertices->data;
-			Geo->index = f1;
-			Geo->next = new VertNode;
-			Geo = Geo->next;
-			Vertices = root;
-			for(int i = 1; i<f2; i++)
-				Vertices = Vertices->next;
-			Geo->data = Vertices->data;
-			Geo->index = f2;
-			Geo->next = new VertNode;
-			Geo = Geo->next;
-			Vertices = root;
-			for(int i = 1; i<f3; i++)
-				Vertices = Vertices->next;
-			Geo->data = Vertices->data;
-			Geo->index = f3;
-			Geo->next = new VertNode;
-			Geo = Geo->next;
-			Geo->next = NULL;
-			FaceIndex++;
-			}
-		else 
-			infile.getline(linetxt, 250, '\n'); //ignore any other lines
 		}
 	infile.close();
-	cout<<"number Vert: "<<VertIndex<<endl;
-	cout<<"number face: "<<FaceIndex<<endl;
-	Geo = GRoot;
-	while(Geo->next !=NULL){
-		cout<<Geo->data.position[0]<<" : "
-			<<Geo->data.position[1]<<" : "
-			<<Geo->data.position[2]<<" : "
-			<<Geo->index
-			<<endl;
-			Geo = Geo->next;}
-	return(GRoot);
-	}
-	
-
-void Geo_insert(VertNode *Vroot, VertNode *Geonode, int Index)
-	{
-	
+	cout<<Geo[0].position[0]<<endl;
+	return(Geo);
 	}
