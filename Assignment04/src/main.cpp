@@ -18,13 +18,19 @@ struct Vertex //https://github.com/ccoulton/cs480coulton.git
     GLfloat position[3];
     GLfloat color[3];
 };
-
+struct Object
+{
+    Vertex *Geo;
+    char *name;
+    unsigned int NumVert;
+};
 //--Evil Global variables
 //Just for this example!
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
-float isRotate = 0.0;
+unsigned int NumToRender;
+double isRotate = 0.0;
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 
@@ -52,7 +58,7 @@ void top_menu(int id);
 //--Resource management
 bool initialize(int argc, char **argv);
 void cleanUp();
-Vertex *modelLoader(char *objName);
+Object modelLoader(char *objName);
 
 //--Random time things
 float getDT();
@@ -237,11 +243,12 @@ void top_menu(int id){
 bool initialize(int argc, char **argv)
 {
     // Initialize basic geometry and shaders for this example
-	Vertex *Geo = modelLoader(argv[3]);//
+	Object OBJ = modelLoader(argv[3]);
+	NumToRender = OBJ.NumVert;//
     // Create a Vertex Buffer object to store this vertex info on the GPU*/
     glGenBuffers(1, &vbo_geometry);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, 2613921*24, Geo, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, OBJ.NumVert*24, OBJ.Geo, GL_STATIC_DRAW);
     //--Geometry done*/
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -388,7 +395,7 @@ const char *shaderloader(char *input){
 	return(output);*/
 	}
 
-Vertex *modelLoader(char *objName)
+Object modelLoader(char *objName)
 	{
 	ifstream infile;
 	infile.open(objName);
@@ -427,14 +434,18 @@ Vertex *modelLoader(char *objName)
 	//Second pass to grab all the information and insert into the gemometry
 	Vertex *Vertices;
 	Vertices = new Vertex [NumVert];
-	Vertex *Geo;
-	Geo = new Vertex[3*NumFaces];
+	Object Output;
+	Output.name = new char[50];
+	Output.Geo = new Vertex[3*NumFaces];
+	Output.NumVert = 3*NumFaces;
 	NumFaces = NumVert = 0;
 	while(infile.good()){
 		infile>>linetest;
 		switch(linetest){
-			case '#':
 			case 'o':
+			infile.getline(Output.name, 50, '\n');
+			break;
+			case '#':
 			case 's':
 			case 'n':
 			infile.getline(linetxt, 250, '\n');
@@ -447,7 +458,7 @@ Vertex *modelLoader(char *objName)
 			case 'f':  //get faces and insert into geometry
 			infile>>faces[0]>>faces[1]>>faces[2]; //get face points
 			for (int fIndex =0; fIndex <= 2; fIndex++){
-				Geo[NumFaces] = Vertices[faces[fIndex]-1];
+				Output.Geo[NumFaces] = Vertices[faces[fIndex]-1];
 				//
 				NumFaces++;
 				}
@@ -457,9 +468,9 @@ Vertex *modelLoader(char *objName)
 	/*for(unsigned int i=0; i<NumFaces; i++){
 		for(int j=0; j<=2; j++)
 			cout<<Geo[i].position[j];//*/
-	cout<<NumFaces;
+	//cout<<NumFaces;
 	infile.close();
-	return(Geo);
+	return(Output);
 	}
 
 
