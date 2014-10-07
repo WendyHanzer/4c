@@ -1,0 +1,10 @@
+#version 330
+
+in Tex_cords
+uniform sample2d glSample
+
+out Texture
+      void main(void)
+      {
+        Texture = texture(glSample, Tex_cords);
+      }
