@@ -1,6 +1,7 @@
 #include <GL/glew.h> // glew must be included before the main gl libs
 #include <GL/glut.h> // doing otherwise causes compiler shouting
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <stdio.h>
 #include <chrono>
@@ -31,19 +32,63 @@ struct Vertex //https://github.com/ccoulton/cs480coulton.git
     GLfloat position[3];
     GLfloat texuv[2];
 };
+
+class Texture{  //CLASS FROM OGLDEV_TEXTURE
+	public:
+		Texture(GLenum TextureTarget, const std::string& FileName);
+		bool Load();
+		void Bind(GLenum TextureUnit);
+	private:
+		std::string mfileName;
+		GLenum mtextureTarget;
+		GLuint mtextureObj;
+		Magick::Image mimage;
+		Magick::Blob mblob;
+	};
+	
+Texture::Texture(GLenum TextureTarget, const std::string& FileName)
+	{
+	mtextureTarget = TextureTarget;
+	mfileName = FileName;
+	}
+
+bool Texture::Load(){
+	try{
+		mimage.read(mfileName);
+		mimage.write(&mblob, "RGBA");
+		}
+	catch (Magick::Error& Error){
+		cout<<"Didn't load texture"<<mfileName<<Error.what()<<endl;
+		return false;
+		}
+	glGenTextures(1, &mtextureObj);
+	glBindTexture(mtextureTarget, mtextureObj);
+	glTexImage2D(mtextureTarget, 0, GL_RGBA, mimage.columns(), mimage.rows(), 0, GL_RGBA, GL_UNSIGNED_BYTE, mblob.data());
+	glTexParameterf(mtextureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(mtextureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(mtextureTarget, 0);
+	return true;
+	}
+
+void Texture::Bind(GLenum TextureUnit){
+	glActiveTexture(TextureUnit);
+	glBindTexture(mtextureTarget, mtextureObj);
+	} 
+	
 struct Object
 {
 	int numMesh;
     Vertex *Geo;
     char *name;
     unsigned int NumVert;
+    Texture *Texs;
 };
 //--Evil Global variables
 //Just for this example!
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
-unsigned int NumToRender;
+Object *OBJ;
 double isRotate = 0.0;
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -168,7 +213,8 @@ void render()
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,texuv));
 	//draw first obj
-    glDrawArrays(GL_TRIANGLES, 0, NumToRender);//mode, starting index, count
+	OBJ[0].Texs->Bind(GL_TEXTURE0);
+    glDrawArrays(GL_TRIANGLES, 0, OBJ[0].NumVert);//mode, starting index, count
 	
     //clean up
     glDisableVertexAttribArray(loc_position);
@@ -257,12 +303,12 @@ void top_menu(int id){
 bool initialize(int argc, char **argv)
 {
     // Initialize basic geometry and shaders for this example
-	Object *OBJ = modelLoader(argv[3]);
-	NumToRender = OBJ[0].NumVert;//
+	OBJ = modelLoader(argv[3]);
+	//
     // Create a Vertex Buffer object to store this vertex info on the GPU*/
     glGenBuffers(1, &vbo_geometry);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, NumToRender*24, OBJ[0].Geo, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, OBJ[0].NumVert*24, OBJ[0].Geo, GL_STATIC_DRAW);
     //--Geometry done*/
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -411,11 +457,16 @@ Object *modelLoader(char *objName)
 	for(unsigned int meshindex =0; meshindex < scene->mNumMeshes; meshindex++){
 		output[meshindex].Geo = new Vertex[scene->mMeshes[meshindex]->mNumVertices];
 	    output[meshindex].NumVert = scene->mMeshes[meshindex]->mNumVertices;
-	    cout<<"Num Verts: "<<scene->mMeshes[meshindex]->mNumVertices<<endl;
-	    cout<<"Num Faces: "<<scene->mMeshes[meshindex]->mNumFaces<<endl;
-	    cout<<"mat index: "<<scene->mMeshes[meshindex]->mMaterialIndex<<endl;
-	    cout<<"Color Chan "<<scene->mMeshes[meshindex]->GetNumColorChannels()<<endl;
-	    cout<<"UV Chan: "<<scene->mMeshes[meshindex]->GetNumUVChannels()<<endl;
+	    const aiMaterial* mat = scene->mMaterials[scene->mMeshes[meshindex]->mMaterialIndex];
+	    if (mat->GetTextureCount(aiTextureType_DIFFUSE) > 0){
+	    	aiString Path;
+	    	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+	    		std::string fullpath = Path.data;
+	    		output[meshindex].Texs = new Texture(GL_TEXTURE_2D, fullpath.c_str());
+	    		if (output[meshindex].Texs->Load())
+	    			cout<<"Success"<<endl;
+	    		}
+	    	}
 	    for (unsigned int Index = 0; 
 	    	Index < scene->mMeshes[meshindex]->mNumVertices; 
 	    	Index++){
