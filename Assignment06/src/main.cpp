@@ -5,8 +5,7 @@
 #include <stdio.h>
 #include <chrono>
 #include <math.h>
-#incl
-ude <Maigick++.h>
+#include <Magick++.h>
 
 #ifdef ASSIMP_2
 #include <assimp/assimp.hpp>
@@ -34,10 +33,10 @@ struct Vertex //https://github.com/ccoulton/cs480coulton.git
 };
 struct Object
 {
-    int numMesh;
-    Vertex **Geo;
+	int numMesh;
+    Vertex *Geo;
     char *name;
-    unsigned int *NumVert;
+    unsigned int NumVert;
 };
 //--Evil Global variables
 //Just for this example!
@@ -73,7 +72,7 @@ void top_menu(int id);
 //--Resource management
 bool initialize(int argc, char **argv);
 void cleanUp();
-Object modelLoader(char *objName);
+Object *modelLoader(char *objName);
 
 //--Random time things
 float getDT();
@@ -163,7 +162,7 @@ void render()
                            0);//offset
 
     glVertexAttribPointer( loc_tex,
-                           3,
+                           2,
                            GL_FLOAT,
                            GL_FALSE,
                            sizeof(Vertex),
@@ -258,12 +257,12 @@ void top_menu(int id){
 bool initialize(int argc, char **argv)
 {
     // Initialize basic geometry and shaders for this example
-	Object OBJ = modelLoader(argv[3]);
-	NumToRender = OBJ.NumVert;//
+	Object *OBJ = modelLoader(argv[3]);
+	NumToRender = OBJ[0].NumVert;//
     // Create a Vertex Buffer object to store this vertex info on the GPU*/
     glGenBuffers(1, &vbo_geometry);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, OBJ.NumVert*24, OBJ.Geo, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, NumToRender*24, OBJ[0].Geo, GL_STATIC_DRAW);
     //--Geometry done*/
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -299,6 +298,8 @@ bool initialize(int argc, char **argv)
     glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &shader_status);
     if(!shader_status)
     {
+    	glGetShaderInfoLog(fragment_shader, 512, NULL, buffer);
+    	std::cerr << buffer << std::endl;
         std::cerr << "[F] FAILED TO COMPILE FRAGMENT SHADER!" << std::endl;
         return false;
     } //sed to store and transform them. 
@@ -320,7 +321,8 @@ bool initialize(int argc, char **argv)
     //this allows us to access them easily while rendering
     loc_position = glGetAttribLocation(program, /*sed to store and transform them.*/  const_cast<const char*>("v_position"));
     if(loc_position == -1)
-    {
+    {	
+    	std::cerr << glGetError() << std::endl;
         std::cerr << "[F] POSITION NOT FOUND" << std::endl;
         return false;
     }
@@ -398,24 +400,35 @@ const char *shaderloader(char *input){
   	return shader;
 	}
 
-Object modelLoader(char *objName)
-	{
-	Object output;
+Object *modelLoader(char *objName)
+	{ 
+	Object *output;
 	Assimp::Importer importer;
-	unsigned int totalNUMVert = 0;
 	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);
-	output.NumMesh = scene->mNumberMeshes;
-	output.Geo = new Vertex[output.NumMesh];
-	output.NumVert = new unsigned int [scene->mNumberMeshes];
-	for(int meshindex =0; meshindex < scene->mNumMeshes; meshindex++){
-	    output.NumVert[meshindex] = scene->mMeshes[meshindex].nNumVertices;
-	    output.Geo[meshindex] = new Vertex[output.NumVert];
-	    
-	for (int meshInd = 0; meshInd < scene->mNumMeshes; meshInd++){
-	    for (unsigned int Index = 0; Index< scene->mesh.mNumVertices; Index++){
-		    output.Geo[Index] = {{mesh->mVertices[Index].x, 
-		                            mesh->mVertices[Index].y, 
-		                            mesh->mVertices[Index].z},{0.0,0.0}}; //add texture
-		}
+	output = new Object[scene->mNumMeshes];
+	output[0].numMesh = scene->mNumMeshes;
+	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
+	for(unsigned int meshindex =0; meshindex < scene->mNumMeshes; meshindex++){
+		output[meshindex].Geo = new Vertex[scene->mMeshes[meshindex]->mNumVertices];
+	    output[meshindex].NumVert = scene->mMeshes[meshindex]->mNumVertices;
+	    cout<<"Num Verts: "<<scene->mMeshes[meshindex]->mNumVertices<<endl;
+	    cout<<"Num Faces: "<<scene->mMeshes[meshindex]->mNumFaces<<endl;
+	    cout<<"mat index: "<<scene->mMeshes[meshindex]->mMaterialIndex<<endl;
+	    cout<<"Color Chan "<<scene->mMeshes[meshindex]->GetNumColorChannels()<<endl;
+	    cout<<"UV Chan: "<<scene->mMeshes[meshindex]->GetNumUVChannels()<<endl;
+	    for (unsigned int Index = 0; 
+	    	Index < scene->mMeshes[meshindex]->mNumVertices; 
+	    	Index++){
+	    	const aiVector3D* pTexCoords = scene->mMeshes[meshindex]-> HasTextureCoords(0) ? &(scene->mMeshes[meshindex]->mTextureCoords[0][Index]): &Zero3D;
+		    output[meshindex].Geo[Index]
+		    				  ={{scene->mMeshes[meshindex]->mVertices[Index].x,
+		                     	 scene->mMeshes[meshindex]->mVertices[Index].y,
+		                         scene->mMeshes[meshindex]->mVertices[Index].z}
+		                       ,{pTexCoords->x, pTexCoords->y}}; //add texture
+		   	/*cout<<output[meshindex].Geo[Index].position[0]<<" : "
+		   		<<output[meshindex].Geo[Index].position[1]<<" : "
+		   		<<output[meshindex].Geo[Index].position[2]<<endl;
+		*/}
+	}
 	return(output);
 	}

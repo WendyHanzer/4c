@@ -4,9 +4,9 @@ in vec2 v_tex;
 
 out vec2 Tex_cord;
 uniform mat4 mvpMatrix;
-out vec4 glPos
+//out vec4 gl_Pos;
 
 void main(void){
-   glPos = mvpMatrix * vec4(v_position, 1.0);
-   Tex_cords = v_tex;
+   gl_Position = mvpMatrix * vec4(v_position, 1.0);
+   Tex_cord = v_tex;
    }
