@@ -1,6 +1,6 @@
 Assignment06, Assimp textures
 
-Shaders and objects in command line, First is VS shader, second is FS shader, third is object to be loaded. UV positions pulled, but wasn't able to put in the texture.
+Shaders and objects in command line, First is VS shader, second is FS shader, third is object to be loaded. UV positions pulled, and texture applied to single object, things in place to make multiple objects, just not right this minute.
 
 I.E.
 ./Assign6 shadervs.cg shaderfs.cg dragon.obj
