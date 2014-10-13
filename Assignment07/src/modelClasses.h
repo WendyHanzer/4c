@@ -1,6 +1,6 @@
 #ifndef MODELCLASSES_H
 #define MODELCLASSES_H
-
+#define GLM_FORCE_RADIANS
 #include <GL/glew.h> 
 #include <GL/glut.h>
 #include <Magick++.h>
@@ -9,7 +9,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
 
-using namespace std;
+
+
 
 struct bodyData
 {
@@ -42,16 +43,23 @@ class Texture{  //CLASS FROM OGLDEV_TEXTURE
 		Magick::Blob mblob;
 	};
 
-struct Object
+class Object
 {
-	int numMesh;
-    Vertex *Geo;
-    char *name;
-    unsigned int NumVert;
-    Texture *Texs;
-    bodyData planetData;
-    glm::mat4 model;
-    bool isMoon;
+    public:
+        Object();
+        bool render();
+        bool bind();
+        bool loadModel(std::string objName);
+        void tick(float dt);
+
+	    int numMesh;
+        Vertex *Geo;
+        char *name;
+        unsigned int NumVert;
+        Texture *Texs;
+        bodyData planetData;
+        glm::mat4 model;
+        bool isMoon;
 };
 
 #endif

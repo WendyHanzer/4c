@@ -7,6 +7,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <chrono>
+#include <vector>
 #include <math.h>
 #include <Magick++.h>
 
@@ -50,6 +51,12 @@ glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye position of the camera
 glm::mat4 projection;//eye->clip lens of the camera
 glm::mat4 mvp;//premultiplied modelviewprojection
+
+//------------------------New Globals-----------------------------
+vector<string> planetFileNames;
+vector<Object> indepPlanets;
+vector<Object> depPlanets;
+//----------------------------------------------------------------
 
 
 //--GLUT Callbacks
@@ -408,25 +415,23 @@ Object *modelLoader(char *objName)
 	    if (mat->GetTextureCount(aiTextureType_DIFFUSE) > 0){
 	    	aiString Path;
 	    	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
-	    		std::string fullpath = Path.data;
-	    		output[meshindex].Texs = new Texture(GL_TEXTURE_2D, fullpath.c_str());
+	    		output[meshindex].Texs = new Texture(GL_TEXTURE_2D, Path.data);
 	    		if (output[meshindex].Texs->Load())
 	    			cout<<"Success"<<endl;
 	    		}
 	    	}
 	    for (unsigned int Index = 0; 
 	    	Index < scene->mMeshes[meshindex]->mNumVertices; 
-	    	Index++){
+	    	Index++)
+        {
 	    	const aiVector3D* pTexCoords = scene->mMeshes[meshindex]-> HasTextureCoords(0) ? &(scene->mMeshes[meshindex]->mTextureCoords[0][Index]): &Zero3D;
 		    output[meshindex].Geo[Index]
 		    				  ={{scene->mMeshes[meshindex]->mVertices[Index].x,
 		                     	 scene->mMeshes[meshindex]->mVertices[Index].y,
 		                         scene->mMeshes[meshindex]->mVertices[Index].z}
 		                       ,{pTexCoords->x, -(pTexCoords->y)}}; //add texture
-		   	/*cout<<output[meshindex].Geo[Index].position[0]<<" : "
-		   		<<output[meshindex].Geo[Index].position[1]<<" : "
-		   		<<output[meshindex].Geo[Index].position[2]<<endl;
-		*/}
+
+		}
 	}
 	return(output);
 	}

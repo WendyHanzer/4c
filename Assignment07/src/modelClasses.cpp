@@ -1,3 +1,4 @@
+#define GLM_FORCE_RADIANS
 #include "modelClasses.h"
 #include <iostream>
 #include <GL/glew.h> 
@@ -36,4 +37,27 @@ void Texture::Bind(GLenum TextureUnit){
 	glBindTexture(mtextureTarget, mtextureObj);
 	} 
 	
+Object::Object()
+    {
+     // nothing for now
+    }
 
+bool Object::render()
+    {
+     return false;
+    }
+
+bool Object::bind()
+    {
+     return false;
+    }
+
+bool Object::loadModel(std::string objName)
+    {
+     return false;
+    }
+
+void tick(float dt)
+    {
+     // noting yet
+    }
