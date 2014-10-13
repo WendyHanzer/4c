@@ -10,6 +10,8 @@
 #include <math.h>
 #include <Magick++.h>
 
+#include "modelClasses.h"
+
 #ifdef ASSIMP_2
 #include <assimp/assimp.hpp>
 #include <assimp/aiScene.h>
@@ -25,66 +27,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
+
 using namespace std;
-
-//--Data types
-//This object will define the attributes of a vertex(position, color, etc...)
-struct Vertex //https://github.com/ccoulton/cs480coulton.git
-{
-    GLfloat position[3];
-    GLfloat texuv[2];
-};
-
-class Texture{  //CLASS FROM OGLDEV_TEXTURE
-	public:
-		Texture(GLenum TextureTarget, const std::string& FileName);
-		bool Load();
-		void Bind(GLenum TextureUnit);
-	private:
-		std::string mfileName;
-		GLenum mtextureTarget;
-		GLuint mtextureObj;
-		Magick::Image mimage;
-		Magick::Blob mblob;
-	};
 	
-Texture::Texture(GLenum TextureTarget, const std::string& FileName)
-	{
-	mtextureTarget = TextureTarget;
-	mfileName = FileName;
-	}
-
-bool Texture::Load(){
-	try{
-		mimage.read(mfileName);
-		mimage.write(&mblob, "RGBA");
-		}
-	catch (Magick::Error& Error){
-		cout<<"Didn't load texture"<<mfileName<<Error.what()<<endl;
-		return false;
-		}
-	glGenTextures(1, &mtextureObj);
-	glBindTexture(mtextureTarget, mtextureObj);
-	glTexImage2D(mtextureTarget, 0, GL_RGBA, mimage.columns(), mimage.rows(), 0, GL_RGBA, GL_UNSIGNED_BYTE, mblob.data());
-	glTexParameterf(mtextureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(mtextureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(mtextureTarget, 0);
-	return true;
-	}
-
-void Texture::Bind(GLenum TextureUnit){
-	glActiveTexture(TextureUnit);
-	glBindTexture(mtextureTarget, mtextureObj);
-	} 
-	
-struct Object
-{
-	int numMesh;
-    Vertex *Geo;
-    char *name;
-    unsigned int NumVert;
-    Texture *Texs;
-};
 //--Evil Global variables
 //Just for this example!
 int w = 640, h = 480;// Window size
@@ -135,7 +80,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(w, h);
     // Name and create the Window
-    glutCreateWindow("Assignment05- Assimp Loader");
+    glutCreateWindow("Assignment07- Solar System");
 	
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -233,7 +178,7 @@ void update()
     static float turn  = 0.0;
     float dt = getDT();// if you have anything moving, use dt.
     angle += dt * M_PI/2; //move through 90 degrees a second
-    turn  += dt * M_PI*isRotate;
+    turn  += dt * isRotate;
     
     model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
     model = glm::rotate(model,turn , glm::vec3(0.0,1.0,0.0));
@@ -277,10 +222,10 @@ void Rotation_menu(int id){
 	switch(id)
 		{
 		case 1: //ccw rotate
-			isRotate = 45.0;
+			isRotate = M_PI/4;
 			break;
 		case 2: //clw rotate
-			isRotate =-45.0;
+			isRotate =-M_PI/4;
 			break;
 		case 3: //stop rotate
 			isRotate = 0.0;
@@ -485,3 +430,5 @@ Object *modelLoader(char *objName)
 	}
 	return(output);
 	}
+
+

@@ -2,21 +2,18 @@
 CC=g++
 LIBS= -lglut -lGLEW -lGL -lassimp `Magick++-config --cppflags --cxxflags --ldflags --libs`
 
-
-# For Macs uncomment the next line and comment out the previous one
-#CC=clang++
-#LIBS=  -framework OpenGL -framework GLUT -framework Cocoa -lGLEW -stdlib=libc++
-# Assuming you want to use a recent compiler
-
 # Compiler flags
-CXXFLAGS= -g -Wall -std=c++0x
+CXXFLAGS= -g -Wall -std=c++0x `Magick++-config --cppflags --cxxflags --ldflags --libs`
 
-all: ../bin/Assign6
+all: ../bin/Assign7
 
-../bin/Assign6 : ../src/main.cpp
-	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Assign6 $(LIBS) $(DEFS)
+../bin/Assign7 : modelClasses.o ../src/main.o
+	$(CC) $(CXXFLAGS)  -o ../bin/Assign7 ../src/main.cpp modelClasses.o $(LIBS) $(DEFS)
+
+modelClasses.o: ../src/modelClasses.cpp ../src/modelClasses.h
+	$(CC) $(CXXFLAGS) -c ../src/modelClasses.cpp
 
 clean:
 	rm -rf *~ 
-	rm *.o ../bin/Assign5
+	rm *.o ../bin/Assign7
 
