@@ -58,6 +58,8 @@ vector<Object> indepPlanets;
 vector<Object> depPlanets;
 //----------------------------------------------------------------
 
+//read in planet info
+void readInPlanets(const char* fileName);
 
 //--GLUT Callbacks
 void render();
@@ -433,6 +435,106 @@ const char *shaderloader(char *input){
   	shader[size] = '\0';
   	return shader;
 	}
+
+void readInPlanets(const char* fileName)
+{
+	ifstream file;
+    char readObj [100];
+    float readValue = 0.0;
+    
+    //data in object is private, make functions or put in public??
+    Object planet(buffer?, false);
+	
+	
+	file.open (fileName);
+	
+	if (file.is_open())
+	{
+		//get the stuff
+        for(int i = 0; i < 5; i++)
+        {
+        	//this is the planet/moon name
+            file >> readObj;
+
+            //if readObj is the sun it has different variables
+            if(strcmp (readObj, "Sun") == 0)
+			{
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.selfSpin = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.axisTilt = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.radius = readValue;
+                
+                indepPlanets.push_back(planet);
+            }
+			//if read object is a moon have to create an obj with bool moon true
+            else if(strcmp (readObj, "Moon") == 0)	//check each name of moon
+			{
+				//mark that this is a moon in obj bool
+                planet.isMoon = true;
+                
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.selfSpin = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.revolution = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.axisTilt = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.radius = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.revolutionRadius = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.revolutionTilt = readValue;
+                
+                depPlanets.push_back(planet);
+            }
+
+            else 
+			{
+				//this is a planet
+				//assign planet name to obj
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.selfSpin = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.revolution = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.axisTilt = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.radius = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.revolutionRadius = readValue;
+                file >> readObj;
+                file >> readValue;
+                planet.planetData.revolutionTilt = readValue;
+                
+                indepPlanets.push_back(planet);
+            }
+      
+        }
+        file.close();
+	}
+	
+	else
+	{
+		cout << "Error opening " << fileName << endl;
+	}
+}
+
 /*
 Object *modelLoader(char *objName)
 	{ 

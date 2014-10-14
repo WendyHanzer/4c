@@ -66,23 +66,23 @@ void Object::tick(float dt)
      static float orbitAngle = 0;
      static float spinAngle = 0;
 
-     orbitAngle += revolution * dt;
-     spinAngle += selfSpin * dt;
+     orbitAngle += planetData.revolution * dt;
+     spinAngle += planetData.selfSpin * dt;
 
      // add orbit tilt
-     modelMatrix = glm::rotate(glm::mat4(1.0f), revolutionTilt, glm::vec3(0.0,0.0,1.0));
+     modelMatrix = glm::rotate(glm::mat4(1.0f), planetData.revolutionTilt, glm::vec3(0.0,0.0,1.0));
 
      // orbit position
-     modelMatrix = glm::translate(modelMatrix, glm::vec3(revolutionRaduis * sin(orbitAngle), 0.0, revolutionRaduis * cos(orbitAngle)));
+     modelMatrix = glm::translate(modelMatrix, glm::vec3(planetData.revolutionRadius * sin(orbitAngle), 0.0, planetData.revolutionRadius * cos(orbitAngle)));
 
      // axis tilt
-     modelMatrix = glm::rotate(modelMatrix, axisTilt, glm::vec3(1.0,0.0,0.0));
+     modelMatrix = glm::rotate(modelMatrix, planetData.axisTilt, glm::vec3(1.0,0.0,0.0));
 
      // self rotation
      modelMatrix = glm::rotate(modelMatrix, spinAngle, glm::vec3(0.0,1.0,0.0));
 
      // scale planet size
-     modelMatrix = glm::scale(modelMatrix, glm::vec3(raduis));
+     modelMatrix = glm::scale(modelMatrix, glm::vec3(planetData.radius));
 
 
     }

@@ -9,6 +9,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
 
+struct Vertex
+{
+    GLfloat position[3];
+    GLfloat texuv[2];
+};
 
 struct meshData
 {
@@ -23,18 +28,14 @@ struct bodyData
     float selfSpin;
     float revolution;
     float axisTilt; // self lean
-    float raduis; // of planet
+    float radius; // of planet
     float revolutionRadius; // orbit raduis
     float revolutionTilt; // tilt of orbit
 };
 
 //--Data types
 //This object will define the attributes of a vertex(position, color, etc...)
-struct Vertex
-{
-    GLfloat position[3];
-    GLfloat texuv[2];
-};
+
 
 class Texture{  //CLASS FROM OGLDEV_TEXTURE
 	public:
@@ -70,6 +71,7 @@ class Object
         // other
         char *name;
         bodyData planetData;
+        GLuint bufferName;
 
         // moon stuff
         bool isMoon;
