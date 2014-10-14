@@ -1,0 +1,12 @@
+#version 330
+
+in vec2 Tex_cord;
+
+uniform sampler2D glSample;
+
+
+out vec4 color;
+
+void main(void){
+	color = texture(glSample, Tex_cord);
+  	}
