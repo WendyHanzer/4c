@@ -53,7 +53,7 @@ glm::mat4 projection;//eye->clip lens of the camera
 glm::mat4 mvp;//premultiplied modelviewprojection
 
 //------------------------New Globals-----------------------------
-vector<string> planetFileNames;
+//vector<string> planetNames;
 vector<Object> indepPlanets;
 vector<Object> depPlanets;
 //----------------------------------------------------------------
@@ -71,7 +71,7 @@ void top_menu(int id);
 //--Resource management
 bool initialize(int argc, char **argv);
 void cleanUp();
-Object *modelLoader(char *objName);
+//Object *modelLoader(char *objName);
 
 //--Random time things
 float getDT();
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 }
 
 //--Implementations
-void render()
+void render() //-----------TODO UPDATE THIS THING PLS----------------
 {
     //--Render the scene
 
@@ -138,20 +138,13 @@ void render()
     glClearColor(0.0, 0.0, 0.2, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //premultiply the matrix for this example
-    mvp = projection * view * model;
-	
     //enable the shader program
     glUseProgram(program);
-	
-    //upload the matrix to the shader
-    glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
-	
-    //set up the Vertex Buffer Object so it can be drawn
+
+    // enable vertex array
     glEnableVertexAttribArray(loc_position);
-    glEnableVertexAttribArray(loc_tex);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    
+    glEnableVertexAttribArray(loc_color);
+
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
                            3,//number of elements
@@ -166,10 +159,35 @@ void render()
                            GL_FALSE,
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,texuv));
-	//draw first obj
-	OBJ[0].Texs->Bind(GL_TEXTURE0);
-    glDrawArrays(GL_TRIANGLES, 0, OBJ[0].NumVert);//mode, starting index, count
-	
+
+    // render each indepPlanet
+    for (unsigned int i = 0; i < indepPlanets.size(); i++)
+        {
+         // generate MVP
+         mvp = projection * view * indepPlanets[i].modelMatrix;
+
+         // bind geometry and texture
+         indepPlanets[i].bind();
+
+         // draw 
+         glDrawArrays(GL_TRIANGLES, 0, OBJ[0].NumVert);//mode, starting index, count
+         
+        }
+
+    // redner each depPlanet
+    for (unsigned int j = 0; j < depPlanets.size(); j++)
+        {
+         // generate MVP
+         mvp = projection * view * depPlanets[j].modelMatrix;
+
+         // bind geometry and texture
+         depPlanets[j].bind();
+
+         // draw 
+         glDrawArrays(GL_TRIANGLES, 0, OBJ[0].NumVert);//mode, starting index, count
+         
+        }
+
     //clean up
     glDisableVertexAttribArray(loc_position);
     glDisableVertexAttribArray(loc_tex);
@@ -180,7 +198,7 @@ void render()
 
 void update()
 {
-    //total time
+ /*   //total time
     static float angle = 0.0;
     static float turn  = 0.0;
     float dt = getDT();// if you have anything moving, use dt.
@@ -189,7 +207,23 @@ void update()
     
     model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
     model = glm::rotate(model,turn , glm::vec3(0.0,1.0,0.0));
-    // Update the state of the scene
+    // Update the state of the scene*/
+
+    // get DT
+    float dt = getDT();
+
+    // update indep bodies
+    for (unsigned int i = 0; i < indepPlanets.size(); i++)
+        {
+         indepPlanets[i].tick(dt);
+        }
+
+    // update dep bodies
+    for (unsigned int j = 0; j < depPlanets.size(); j++)
+        {
+         depPlanets[j].tick(dt);
+        }
+
     glutPostRedisplay();//call the display callback
 }
 
@@ -211,11 +245,11 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     // Handle keyboard input
     if((key == 27)||(key == 'q')||(key == 'Q'))//ESC
         exit(0);
-    else if ((key == 'm')||(key == 'M')) //menu
+    else if ((key == 'a')||(key == 'A')) //menu
     	Rotation_menu(1);
-    else if ((key == 'a')||(key == 'A'))
+    else if ((key == 's')||(key == 'S'))
     	Rotation_menu(2);
-    else if ((key == 'z')||(key == 'Z'))
+    else if ((key == 'd')||(key == 'D'))
     	Rotation_menu(3);
 }
 
@@ -257,7 +291,7 @@ void top_menu(int id){
 bool initialize(int argc, char **argv)
 {
     // Initialize basic geometry and shaders for this example
-	OBJ = modelLoader(argv[3]);
+	//OBJ = modelLoader(argv[3]);
 	//
     // Create a Vertex Buffer object to store this vertex info on the GPU*/
     glGenBuffers(1, &vbo_geometry);
@@ -399,7 +433,7 @@ const char *shaderloader(char *input){
   	shader[size] = '\0';
   	return shader;
 	}
-
+/*
 Object *modelLoader(char *objName)
 	{ 
 	Object *output;
@@ -435,5 +469,5 @@ Object *modelLoader(char *objName)
 	}
 	return(output);
 	}
-
+*/
 
