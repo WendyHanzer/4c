@@ -19,7 +19,7 @@
 #include <assimp/color4.h>
 #include <assimp/postprocess.h>
 #endif
-
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
@@ -82,7 +82,7 @@ struct Object
     char *name;
     unsigned int NumVert;
     Texture *Texs;
-    GLuin vbo_Geo;
+    GLuint vbo_Geo;
 };
 //--Evil Global variables
 //Just for this example!
@@ -197,7 +197,8 @@ void render()
     //set up the Vertex Buffer Object so it can be drawn
     glEnableVertexAttribArray(loc_position);
     glEnableVertexAttribArray(loc_tex);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
+    for(int meshindex =0; meshindex< OBJ[0].numMesh; meshindex++){
+    glBindBuffer(GL_ARRAY_BUFFER, OBJ[meshindex].vbo_Geo);
     
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
@@ -214,9 +215,9 @@ void render()
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,texuv));
 	//draw first obj
-	OBJ[0].Texs->Bind(GL_TEXTURE0);
-    glDrawArrays(GL_TRIANGLES, 0, OBJ[0].NumVert);//mode, starting index, count
-	
+	OBJ[meshindex].Texs->Bind(GL_TEXTURE0);
+    glDrawArrays(GL_TRIANGLES, 0, OBJ[meshindex].NumVert);//mode, starting index, count
+	}
     //clean up
     glDisableVertexAttribArray(loc_position);
     glDisableVertexAttribArray(loc_tex);
@@ -414,7 +415,7 @@ void cleanUp()
 {
     // Clean up, Clean up
     glDeleteProgram(program);
-    glDeleteBuffers(1, &vbo_geometry);
+    glDeleteBuffers(1, &OBJ[0].vbo_Geo);
     //glDeleteBuffers(1, &vbo_geometry2);
 }
 
@@ -482,10 +483,15 @@ Object *modelLoader(char *objName)
 		   		<<output[meshindex].Geo[Index].position[2]<<endl;
 		  
 		*/}
+    cout<<"attempting binding"<<endl;
 	glGenBuffers(1, &output[meshindex].vbo_Geo);
-    glBindBuffer(GL_ARRAY_BUFFER, output[meshindex].vbo_geo);
-    glBufferData(GL_ARRAY_BUFFER, OBJ[meshindex].NumVert*24,
-                     OBJ[meshindex].Geo, GL_STATIC_DRAW);
+    cout<<"buffers gen'd"<<endl;
+    glBindBuffer(GL_ARRAY_BUFFER, output[meshindex].vbo_Geo);
+    cout<<"bind buffer"<<endl;
+    glBufferData(GL_ARRAY_BUFFER, output[meshindex].NumVert*24,
+                     output[meshindex].Geo, GL_STATIC_DRAW);
+    cout<<"bound"<<endl;
 	}
+    cout<<"loaded"<<endl;
 	return(output);
 	}

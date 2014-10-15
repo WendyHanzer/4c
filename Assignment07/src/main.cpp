@@ -146,7 +146,7 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
     // enable vertex array
     glEnableVertexAttribArray(loc_position);
     glEnableVertexAttribArray(loc_color);
-
+    
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
                            3,//number of elements
@@ -161,19 +161,21 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
                            GL_FALSE,
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,texuv));
-
+                           
     // render each indepPlanet
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
         {
+        for(int meshindex =0; meshindex <indepPlanets.numMesh; meshindex++){
          // generate MVP
          mvp = projection * view * indepPlanets[i].modelMatrix;
 
          // bind geometry and texture
-         indepPlanets[i].bind();
+         indepPlanets[i].bind(meshindex);
 
          // draw 
-         glDrawArrays(GL_TRIANGLES, 0, OBJ[0].NumVert);//mode, starting index, count
-         
+         glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[meshindex].NumVert);
+         //mode, starting index, count
+         }
         }
 
     // redner each depPlanet
@@ -282,6 +284,7 @@ void top_menu(int id){
 	
 bool initialize(int argc, char **argv)
 {
+<<<<<<< HEAD
     // get object data
     readInPlanets(argv[3]);
 
@@ -299,6 +302,8 @@ bool initialize(int argc, char **argv)
          depPlanets[j].load(pathName);
         }
 
+=======
+>>>>>>> 298fd17b724be6b65bf17a2f76256a06bd89e40a
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
