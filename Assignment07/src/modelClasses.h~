@@ -53,7 +53,7 @@ class Object
 {
     public:
         Object();
-        bool bind(int index);
+        bool bind();
         void render();
         bool load(std::string objName); //load obj model and texture info
         void tick(float dt);

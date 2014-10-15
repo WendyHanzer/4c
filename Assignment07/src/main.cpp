@@ -35,7 +35,7 @@ using namespace std;
 //Just for this example!
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
-GLuint vbo_geometry;// VBO handle for our geometry
+//GLuint vbo_geometry;// VBO handle for our geometry
 Object *OBJ;
 double isRotate = 0.0;
 //uniform locations
@@ -146,7 +146,7 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
     // enable vertex array
     glEnableVertexAttribArray(loc_position);
     glEnableVertexAttribArray(loc_color);
-
+    
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
                            3,//number of elements
@@ -161,19 +161,21 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
                            GL_FALSE,
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,texuv));
-
+                           
     // render each indepPlanet
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
         {
+        for(int meshindex =0; meshindex <indepPlanets.numMesh; meshindex++){
          // generate MVP
          mvp = projection * view * indepPlanets[i].modelMatrix;
 
          // bind geometry and texture
-         indepPlanets[i].bind();
+         indepPlanets[i].bind(meshindex);
 
          // draw 
-         glDrawArrays(GL_TRIANGLES, 0, OBJ[0].NumVert);//mode, starting index, count
-         
+         glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[meshindex].NumVert);
+         //mode, starting index, count
+         }
         }
 
     // redner each depPlanet
@@ -292,14 +294,6 @@ void top_menu(int id){
 	
 bool initialize(int argc, char **argv)
 {
-    // Initialize basic geometry and shaders for this example
-	//OBJ = modelLoader(argv[3]);
-	//
-    // Create a Vertex Buffer object to store this vertex info on the GPU*/
-    glGenBuffers(1, &vbo_geometry);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, OBJ[0].NumVert*24, OBJ[0].Geo, GL_STATIC_DRAW);
-    //--Geometry done*/
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
