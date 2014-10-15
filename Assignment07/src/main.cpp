@@ -35,7 +35,7 @@ using namespace std;
 //Just for this example!
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
-GLuint vbo_geometry;// VBO handle for our geometry
+//GLuint vbo_geometry;// VBO handle for our geometry
 Object *OBJ;
 double isRotate = 0.0;
 //uniform locations
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 void render() //-----------TODO UPDATE THIS THING PLS----------------
 {
     //--Render the scene
-
+/*
     //clear the screen
     glClearColor(0.0, 0.0, 0.2, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -193,24 +193,14 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
     //clean up
     glDisableVertexAttribArray(loc_position);
     glDisableVertexAttribArray(loc_tex);
-                           
+                      
+*/     
     //swap the buffers
     glutSwapBuffers();
 }
 
 void update()
 {
- /*   //total time
-    static float angle = 0.0;
-    static float turn  = 0.0;
-    float dt = getDT();// if you have anything moving, use dt.
-    angle += dt * M_PI/2; //move through 90 degrees a second
-    turn  += dt * isRotate;
-    
-    model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
-    model = glm::rotate(model,turn , glm::vec3(0.0,1.0,0.0));
-    // Update the state of the scene*/
-
     // get DT
     float dt = getDT();
 
@@ -292,14 +282,23 @@ void top_menu(int id){
 	
 bool initialize(int argc, char **argv)
 {
-    // Initialize basic geometry and shaders for this example
-	//OBJ = modelLoader(argv[3]);
-	//
-    // Create a Vertex Buffer object to store this vertex info on the GPU*/
-    glGenBuffers(1, &vbo_geometry);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, OBJ[0].NumVert*24, OBJ[0].Geo, GL_STATIC_DRAW);
-    //--Geometry done*/
+    // get object data
+    readInPlanets(argv[3]);
+
+    char* pathName;
+
+    // load model data for each object
+    for(int i = 0; i < indepPlanets.size(); i++)
+        {
+         sprintf(pathName, "/texture/%s.obj", indepPlanet[i].name);
+         indepPlanets[i].load(pathName);
+        }
+    for(int j = 0; j < depPlanets.size(); j++)
+        {
+         sprintf(pathName, "/texture/%s.obj", depPlanet[j].name);
+         depPlanets[j].load(pathName);
+        }
+
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -403,7 +402,7 @@ void cleanUp()
 {
     // Clean up, Clean up
     glDeleteProgram(program);
-    glDeleteBuffers(1, &vbo_geometry);
+    //glDeleteBuffers(1, &vbo_geometry);
     //glDeleteBuffers(1, &vbo_geometry2);
 }
 
@@ -444,7 +443,7 @@ void readInPlanets(const char* fileName)
     int currentPlanet = 0;
     
     //data in object is private, make functions or put in public??
-    Object planet();
+    Object* planet;
 	
 	
 	file.open (fileName);
@@ -454,6 +453,8 @@ void readInPlanets(const char* fileName)
 		//get the stuff
         for(int i = 0; i < 5; i++)
         {
+            planet = new Object;
+
         	//this is the planet/moon name
             file >> readObj;
 
@@ -462,20 +463,20 @@ void readInPlanets(const char* fileName)
 			{
                 file >> readObj;
                 file >> readValue;
-                planet.planetData.selfSpin = readValue;
+                planet->planetData.selfSpin = readValue;
                 file >> readObj;
                 file >> readValue;
-                planet.planetData.axisTilt = readValue;
+                planet->planetData.axisTilt = readValue;
                 file >> readObj;
                 file >> readValue;
-                planet.planetData.radius = readValue;
-                planet.planetData.revolution = 0;
-                planet.planetData.revolutionTilt = 0;
-                planet.planetData.revolutionRadius = 0;
-                planet.planetData.isMoon = 0;
-                planet.planetData.parentInd = 0;
+                planet->planetData.radius = readValue;
+                planet->planetData.revolution = 0;
+                planet->planetData.revolutionTilt = 0;
+                planet->planetData.revolutionRadius = 0;
+                planet->planetData.isMoon = 0;
+                planet->planetData.parentInd = 0;
                 
-                indepPlanets.push_back(planet);
+                indepPlanets.push_back(*planet);
             }
 
             else 
@@ -491,49 +492,49 @@ void readInPlanets(const char* fileName)
                 	
 		            file >> readObj;
 		            file >> readValue;
-                	planet.planetData.selfSpin = readValue;
+                	planet->planetData.selfSpin = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.revolution = readValue;
+		            planet->planetData.revolution = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.axisTilt = readValue;
+		            planet->planetData.axisTilt = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.radius = readValue;
+		            planet->planetData.radius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.revolutionRadius = readValue;
+		            planet->planetData.revolutionRadius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.revolutionTilt = readValue;
-		            
-                	indepPlanets.push_back(planet);
-		            planet.planetData.parentInd = 0;
+		            planet->planetData.revolutionTilt = readValue;
+		            planet->planetData.parentInd = 0;        
+                	indepPlanets.push_back(*planet);
+
                 }
                 else
                 {	
                 	file >> readObj;
 		            file >> readValue;
-		            planet.planetData.selfSpin = readValue;
+		            planet->planetData.selfSpin = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.revolution = readValue;
+		            planet->planetData.revolution = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.axisTilt = readValue;
+		            planet->planetData.axisTilt = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.radius = readValue;
+		            planet->planetData.radius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.revolutionRadius = readValue;
+		            planet->planetData.revolutionRadius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet.planetData.revolutionTilt = readValue;
-		            
-		            depPlanets.push_back(planet);
-		            planet.planetData.parentInd = currentPlanet;
+		            planet->planetData.revolutionTilt = readValue;
+		            planet->planetData.parentInd = currentPlanet;
+		            depPlanets.push_back(*planet);
+
                 }
             }
       
