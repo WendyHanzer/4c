@@ -8,7 +8,7 @@ Mercury
 	Revolution 0.000047365 
 	Axial_tilt 2.11 
 	Radius 2439.7
-	Revolution_radius 57909050 
+	Revolution_radius 57909227 
 	Revolution_tilt_angle 3.38 
 
 Venus
@@ -16,7 +16,7 @@ Venus
 	Revolution 0.000018601 
 	Axial_tilt 177.36 
 	Radius 6051.8 
-	Revolution_radius 53792969.5 
+	Revolution_radius 108209475 
 	Revolution_tilt_angle 3.86 
 
 Earth
@@ -84,18 +84,18 @@ Callisto
 	Revolution_tilt_angle 0.47  
 
 Ganymede
-	Self-spin 0
-	Revolution 0    
+	Self-spin .0013249166
+	Revolution .0013249166    
 	Axial_tilt 0 
 	Radius 2634 
-	Revolution_radius 421800 
-	Revolution_tilt_angle 0.05  
+	Revolution_radius 1070400 
+	Revolution_tilt_angle 0.17  
 
 Europa
-	Self-spin  0
-	Revolution 0    
+	Self-spin  .00065759259
+	Revolution .00065759259    
 	Axial_tilt 0 
-	Radius 1565 
+	Radius 1560.8 
 	Revolution_radius 671100 
 	Revolution_tilt_angle 0.47   
 
@@ -104,47 +104,47 @@ Saturn
 	Revolution  .000000355073287 
 	Axial_tilt 26.73 
 	Radius 60268 
-	Revolution_radius  752449369.5 
+	Revolution_radius  1426666422 
 	Revolution_tilt_angle 2.485 
 
-Saturn moon 1
-	Self-spin 0
-	Revolution 0   
+Titan
+	Self-spin .0029475
+	Revolution .0029475   
 	Axial_tilt 0 
-	Radius 12.4 
-	Revolution_radius 294619 
-	Revolution_tilt_angle 1.19   
+	Radius 2574.7 
+	Revolution_radius 1221865 
+	Revolution_tilt_angle 0.3   
 
-Saturn moon 2
-	Self-spin 0
-	Revolution 0  
+Rhea
+	Self-spin .00083666
+	Revolution .00083666  
 	Axial_tilt 0 
-	Radius 14.1 
-	Revolution_radius 133584 
-	Revolution_tilt_angle 0    
+	Radius 764.3 
+	Revolution_radius 527068 
+	Revolution_tilt_angle 0.33    
 
-Saturn moon 3
-	Self-spin 0
-	Revolution 0  
+Iapetus
+	Self-spin .0146907
+	Revolution .0146907  
 	Axial_tilt 0 
-	Radius 14.1 
-	Revolution_radius 133584 
-	Revolution_tilt_angle 0    
+	Radius 735.6 
+	Revolution_radius 3560851 
+	Revolution_tilt_angle 8.313    
 
-Saturn moon 4
-	Self-spin 0
-	Revolution 0  
+Dione
+	Self-spin .0005068
+	Revolution .0005068  
 	Axial_tilt 0 
-	Radius 14.1 
-	Revolution_radius 133584 
-	Revolution_tilt_angle 0  
+	Radius 561.7 
+	Revolution_radius 377415 
+	Revolution_tilt_angle .028  
 
 Uranus
 	Self-spin -0.00580049095355430883669993828278 
 	Revolution .00000013528536038694210549584871460238    
 	Axial_tilt 97.77 
 	Radius 25559 
-	Revolution_radius 2876679082.5 
+	Revolution_radius 2870658186.5 
 	Revolution_tilt_angle 6.48 
 
 Prospero
@@ -168,7 +168,7 @@ Neptune
 	Revolution .00000006906731    
 	Axial_tilt 28.32 
 	Radius 24764 
-	Revolution_radius 2503443661.5 
+	Revolution_radius 4498396441 
 	Revolution_tilt_angle 6.43  
 
 Triton
@@ -187,6 +187,12 @@ Thalassa
 	Revolution_radius 50075 
 	Revolution_tilt_angle 0.209  
 
-
+Pluto
+	Self-spin -.0011828
+	Revolution .0028406    
+	Axial_tilt 0 
+	Radius 1151 
+	Revolution_radius 590644628 
+	Revolution_tilt_angle 17.14  
 
 
