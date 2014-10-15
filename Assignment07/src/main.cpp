@@ -168,7 +168,7 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
         for(int meshindex =0; meshindex <indepPlanets.numMesh; meshindex++){
          // generate MVP
          mvp = projection * view * indepPlanets[i].modelMatrix;
-
+         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
          // bind geometry and texture
          indepPlanets[i].bind(meshindex);
 
@@ -183,12 +183,12 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
         {
          // generate MVP
          mvp = projection * view * depPlanets[j].modelMatrix;
-
+         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
          // bind geometry and texture
-         depPlanets[j].bind();
+         depPlanets[j].bind(0);
 
          // draw 
-         glDrawArrays(GL_TRIANGLES, 0, OBJ[0].NumVert);//mode, starting index, count
+         glDrawArrays(GL_TRIANGLES, 0, depPlanets[i].mesh[0].NumVert);//mode, starting index, count
          
         }
 
