@@ -5,6 +5,12 @@
 #include <GL/glut.h>
 #include <Magick++.h>
 #include <string>
+#include <vector>
+
+#include <assimp/Importer.hpp>  //Asset Importer
+#include <assimp/scene.h>		//Asset Importer scene graph aiScene object
+#include <assimp/color4.h>
+#include <assimp/postprocess.h>
 
 using namespace std;
 
@@ -14,7 +20,7 @@ Texture::Texture(GLenum TextureTarget, const std::string& FileName)
 	mfileName = FileName;
 	}
 
-bool Texture::Load(){
+bool Texture::Load(){ cout<<"test"<<endl;
 	try{
 		mimage.read(mfileName);
 		mimage.write(&mblob, "RGBA");
@@ -22,8 +28,8 @@ bool Texture::Load(){
 	catch (Magick::Error& Error){
 		cout<<"Didn't load texture"<<mfileName<<Error.what()<<endl;
 		return false;
-		}
-	glGenTextures(1, &mtextureObj);
+		}cout<<"test2"<<endl;
+	glGenTextures(1, &mtextureObj);cout<<"test3"<<endl;
 	glBindTexture(mtextureTarget, mtextureObj);
 	glTexImage2D(mtextureTarget, 0, GL_RGBA, mimage.columns(), mimage.rows(), 0, GL_RGBA, GL_UNSIGNED_BYTE, mblob.data());
 	glTexParameterf(mtextureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -47,7 +53,7 @@ Object::Object()
 bool Object::bind(int index)
     {
     glBindBuffer(GL_ARRAY_BUFFER, mesh[index].bufferName);
-    Texs[index].bind(GL_TEXTURE0) 
+    mesh[index].Texs[0].Bind(GL_TEXTURE0);
      return true;
     }
 
@@ -63,10 +69,10 @@ bool Object::load(std::string objName)
 	mesh = new meshData[scene->mNumMeshes];  //make mesh array the size of meshes in file
 	numMesh = scene->mNumMeshes;  //
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
-	for(unsigned int meshindex =0; meshindex < numMesh; meshindex++){
+	for(int meshindex =0; meshindex < numMesh; meshindex++){
 	    //set up mesh array for number of meshes in scene since we trianglated vertiecs are already in face order
 	    mesh[meshindex].NumVert = scene->mMeshes[meshindex]->mNumVertices;
-		mesh[meshindex].Geo = new Vertex[mesh[meshindex.NumVert]];
+		mesh[meshindex].Geo = new Vertex[(mesh[meshindex].NumVert)];
 	    
 	    const aiMaterial* mat = scene->mMaterials[scene->mMeshes[meshindex]->mMaterialIndex];
 	    

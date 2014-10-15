@@ -53,7 +53,6 @@ glm::mat4 projection;//eye->clip lens of the camera
 glm::mat4 mvp;//premultiplied modelviewprojection
 
 //------------------------New Globals-----------------------------
-//vector<string> planetNames;
 vector<Object> indepPlanets;
 vector<Object> depPlanets;
 //----------------------------------------------------------------
@@ -284,26 +283,22 @@ void top_menu(int id){
 	
 bool initialize(int argc, char **argv)
 {
-<<<<<<< HEAD
     // get object data
-    readInPlanets(argv[3]);
+    readInPlanets(argv[3]);cout<<"something"<<endl;
 
-    char* pathName;
+    char* pathName = new char[256];
 
     // load model data for each object
-    for(int i = 0; i < indepPlanets.size(); i++)
+    for(unsigned int i = 0; i < indepPlanets.size(); i++)
         {
-         sprintf(pathName, "/texture/%s.obj", indepPlanet[i].name);
+         sprintf(pathName, "/texture/%s.obj", indepPlanets[i].name);
          indepPlanets[i].load(pathName);
         }
-    for(int j = 0; j < depPlanets.size(); j++)
+    for(unsigned int j = 0; j < depPlanets.size(); j++)
         {
-         sprintf(pathName, "/texture/%s.obj", depPlanet[j].name);
+         sprintf(pathName, "/texture/%s.obj", depPlanets[j].name);
          depPlanets[j].load(pathName);
         }
-
-=======
->>>>>>> 298fd17b724be6b65bf17a2f76256a06bd89e40a
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -456,7 +451,7 @@ void readInPlanets(const char* fileName)
 	if (file.is_open())
 	{
 		//get the stuff
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 2; i++)
         {
             planet = new Object;
 
@@ -464,8 +459,9 @@ void readInPlanets(const char* fileName)
             file >> readObj;
 
             //if readObj is the sun it has different variables
-            if(strcmp (readObj, "Sun") == 0)
+            if(strcmp (readObj, "sun") == 0)
 			{
+                strcpy(planet->name, readObj); cout<<planet->name<<endl;
                 file >> readObj;
                 file >> readValue;
                 planet->planetData.selfSpin = readValue;
@@ -480,12 +476,13 @@ void readInPlanets(const char* fileName)
                 planet->planetData.revolutionRadius = 0;
                 planet->planetData.isMoon = 0;
                 planet->planetData.parentInd = 0;
-                
+                planet->moons = &depPlanets;
                 indepPlanets.push_back(*planet);
             }
 
             else 
 			{
+                strcpy(planet->name, readObj); cout<<planet->name<<endl;
 				//this is a planet or moon
 				//assign planet name to obj
                 file >> readObj;
@@ -513,7 +510,8 @@ void readInPlanets(const char* fileName)
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
-		            planet->planetData.parentInd = 0;        
+		            planet->planetData.parentInd = 0; 
+                    planet->moons = &depPlanets;       
                 	indepPlanets.push_back(*planet);
 
                 }
@@ -538,13 +536,14 @@ void readInPlanets(const char* fileName)
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
 		            planet->planetData.parentInd = currentPlanet;
+                    planet->moons = &depPlanets;
 		            depPlanets.push_back(*planet);
 
                 }
-            }
+            }cout<<"END"<<endl;
       
         }
-        file.close();
+        file.close(); cout<<"EXIT"<<endl;
 	}
 	
 	else

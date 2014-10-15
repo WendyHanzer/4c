@@ -8,35 +8,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
+#include <vector>
+
+using namespace std;
+
+class Object;
 
 struct Vertex
 {
     GLfloat position[3];
     GLfloat texuv[2];
 };
-
-struct meshData
-{
-    unsigned int NumVert;
-    Vertex *Geo;
-    GLuint bufferName;
-};
-
-struct bodyData
-{
-    float selfSpin;
-    float revolution;
-    float axisTilt; // self lean
-    float radius; // of planet
-    float revolutionRadius; // orbit raduis
-    float revolutionTilt; // tilt of orbit
-    bool isMoon;
-    int parentInd;
-};
-
-//--Data types
-//This object will define the attributes of a vertex(position, color, etc...)
-
 
 class Texture{  //CLASS FROM OGLDEV_TEXTURE
 	public:
@@ -51,32 +33,46 @@ class Texture{  //CLASS FROM OGLDEV_TEXTURE
 		Magick::Blob mblob;
 	};
 
+struct meshData
+{
+    unsigned int NumVert;
+    Vertex *Geo;
+    GLuint bufferName;
+    Texture *Texs;
+};
+
+struct bodyData
+{
+    float selfSpin;
+    float revolution;
+    float axisTilt; // self lean
+    float radius; // of planet
+    float revolutionRadius; // orbit raduis
+    float revolutionTilt; // tilt of orbit
+    bool isMoon;
+    int parentInd;
+};
+
 class Object
 {
     public:
         Object();
-<<<<<<< HEAD
+
         bool bind(int index);
-=======
         bool bind();
->>>>>>> e61a61e35d7c282a10a022494c6d57f96f60cfab
         void render();
         bool load(std::string objName); //load obj model and texture info
         void tick(float dt);
         
         char *name;
         bodyData planetData;
+        vector<Object> *moons;
 
         // model
         meshData *mesh;
         glm::mat4 modelMatrix;
-        int numMesh= 0;
-   
-        // texture
-        Texture *Texs;
+        int numMesh;
 
-        // other
-        GLuint bufferName;
 };
 
 #endif
