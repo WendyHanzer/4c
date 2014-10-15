@@ -37,27 +37,52 @@ void Texture::Bind(GLenum TextureUnit){
 	glBindTexture(mtextureTarget, mtextureObj);
 	} 
 	
-Object::Object()
+Object::Object(GLuint buffer, bool moon)
     {
-     // nothing for now
-    }
+     bufferName = buffer;
 
-bool Object::render()
-    {
-     return false;
+     isMoon = moon;
     }
 
 bool Object::bind()
     {
-     return false;
+     glBindBuffer(GL_ARRAY_BUFFER, bufferName);
+
+     return true;
     }
 
-bool Object::loadModel(std::string objName)
+void Object::render()
+    {
+     // something
+    }
+
+bool Object::load(std::string objName)
     {
      return false;
     }
 
-void tick(float dt)
+void Object::tick(float dt)
     {
-     // noting yet
+     static float orbitAngle = 0;
+     static float spinAngle = 0;
+
+     orbitAngle += planetData.revolution * dt;
+     spinAngle += planetData.selfSpin * dt;
+
+     // add orbit tilt
+     modelMatrix = glm::rotate(glm::mat4(1.0f), planetData.revolutionTilt, glm::vec3(0.0,0.0,1.0));
+
+     // orbit position
+     modelMatrix = glm::translate(modelMatrix, glm::vec3(planetData.revolutionRadius * sin(orbitAngle), 0.0, planetData.revolutionRadius * cos(orbitAngle)));
+
+     // axis tilt
+     modelMatrix = glm::rotate(modelMatrix, planetData.axisTilt, glm::vec3(1.0,0.0,0.0));
+
+     // self rotation
+     modelMatrix = glm::rotate(modelMatrix, spinAngle, glm::vec3(0.0,1.0,0.0));
+
+     // scale planet size
+     modelMatrix = glm::scale(modelMatrix, glm::vec3(planetData.radius));
+
+
     }

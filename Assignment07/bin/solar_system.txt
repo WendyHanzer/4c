@@ -1,0 +1,198 @@
+Sun
+	Self-spin .000166333999
+	Axial_tilt 7.25 
+	Radius 696000  
+
+Mercury
+	Self-spin 0.000071048
+	Revolution 0.000047365 
+	Axial_tilt 2.11 
+	Radius 2439.7
+	Revolution_radius 57909227 
+	Revolution_tilt_angle 3.38 
+
+Venus
+	Self-spin -0.000017145 
+	Revolution 0.000018601 
+	Axial_tilt 177.36 
+	Radius 6051.8 
+	Revolution_radius 108209475 
+	Revolution_tilt_angle 3.86 
+
+Earth
+	Self-spin .00007292
+	Revolution .00001145833 
+	Axial_tilt 23
+	Radius 6371
+	Revolution_radius 149597870 
+	Revolution_tilt_angle 7.25  
+
+Moon
+	Self-spin .00015252
+	Axial_tilt 6.687
+	revolution -.000154321   
+	Revolution_radius 384000
+	Revolution_tilt_angle 6.687 
+	Radius 1737.5  
+
+Mars
+	Self-spin 0.0040610786224821 
+	Revolution  .00000495092993100945  
+	Axial_tilt 25.19 
+	Radius 3389.5 
+	Revolution_radius 227925000 
+	Revolution_tilt_angle 5.65    
+
+Demos
+	Self-spin 0.013065328 
+	Revolution 0.013065328  
+	Axial_tilt 0 
+	Radius 11.1 
+	Revolution_radius 9377.2 
+	Revolution_tilt_angle 1.093  
+
+Phobos
+	Self-spin 0.003300487 
+	Revolution 0.003300487  
+	Axial_tilt 0 
+	Radius 6.2 
+	Revolution_radius 23460 
+	Revolution_tilt_angle 0.93
+
+Jupiter
+	Self-spin 0.0100755667506297 
+	Revolution .00001044591522930873   
+	Axial_tilt 3.13
+	Radius 71492 
+	Revolution_radius 778547200
+	Revolution_tilt_angle 6.09  
+
+Io
+	Self-spin 0.00235519624284745601305395817636 
+	Revolution 0.00235519624284745601305395817636    
+	Axial_tilt 0 
+	Radius 1830 
+	Revolution_radius 421800 
+	Revolution_tilt_angle 0.05  
+
+Callisto
+	Self-spin 0.00117331857164154832698282212604 
+	Revolution 0.00117331857164154832698282212604    
+	Axial_tilt 0 
+	Radius 3121.6 
+	Revolution_radius 671100 
+	Revolution_tilt_angle 0.47  
+
+Ganymede
+	Self-spin .0013249166
+	Revolution .0013249166    
+	Axial_tilt 0 
+	Radius 2634 
+	Revolution_radius 1070400 
+	Revolution_tilt_angle 0.17  
+
+Europa
+	Self-spin  .00065759259
+	Revolution .00065759259    
+	Axial_tilt 0 
+	Radius 1560.8 
+	Revolution_radius 671100 
+	Revolution_tilt_angle 0.47   
+
+Saturn 
+	Self-spin 0.00949126803340926347760060744115 
+	Revolution  .000000355073287 
+	Axial_tilt 26.73 
+	Radius 60268 
+	Revolution_radius  1426666422 
+	Revolution_tilt_angle 2.485 
+
+Titan
+	Self-spin .0029475
+	Revolution .0029475   
+	Axial_tilt 0 
+	Radius 2574.7 
+	Revolution_radius 1221865 
+	Revolution_tilt_angle 0.3   
+
+Rhea
+	Self-spin .00083666
+	Revolution .00083666  
+	Axial_tilt 0 
+	Radius 764.3 
+	Revolution_radius 527068 
+	Revolution_tilt_angle 0.33    
+
+Iapetus
+	Self-spin .0146907
+	Revolution .0146907  
+	Axial_tilt 0 
+	Radius 735.6 
+	Revolution_radius 3560851 
+	Revolution_tilt_angle 8.313    
+
+Dione
+	Self-spin .0005068
+	Revolution .0005068  
+	Axial_tilt 0 
+	Radius 561.7 
+	Revolution_radius 377415 
+	Revolution_tilt_angle .028  
+
+Uranus
+	Self-spin -0.00580049095355430883669993828278 
+	Revolution .00000013528536038694210549584871460238    
+	Axial_tilt 97.77 
+	Radius 25559 
+	Revolution_radius 2870658186.5 
+	Revolution_tilt_angle 6.48 
+
+Prospero
+	Self-spin 0.0124365487283877656198077409059 
+	Revolution 0.0124365487283877656198077409059    
+	Axial_tilt 0 
+	Radius 20 
+	Revolution_radius 49751.7 
+	Revolution_tilt_angle 0.08479  
+
+Stephano
+	Self-spin 0.0110694898293527447906980863066 
+	Revolution 0.0110694898293527447906980863066    
+	Axial_tilt 0 
+	Radius 21.5 
+	Revolution_radius 53764 
+	Revolution_tilt_angle 0.093  
+
+Neptune
+	Self-spin 0.0069444 
+	Revolution .00000006906731    
+	Axial_tilt 28.32 
+	Radius 24764 
+	Revolution_radius 4498396441 
+	Revolution_tilt_angle 6.43  
+
+Triton
+	Self-spin 0.01417233560090702947845804988662 
+	Revolution -0.01417233560090702947845804988662    
+	Axial_tilt 0 
+	Radius 1353 
+	Revolution_radius 35227 
+	Revolution_tilt_angle 4.746  
+
+Thalassa
+	Self-spin 0.01339764201500535905680600214362 
+	Revolution 0.01339764201500535905680600214362    
+	Axial_tilt 0 
+	Radius 41 
+	Revolution_radius 50075 
+	Revolution_tilt_angle 0.209  
+
+Pluto
+	Self-spin -.0011828
+	Revolution .0028406    
+	Axial_tilt 0 
+	Radius 1151 
+	Revolution_radius 590644628 
+	Revolution_tilt_angle 17.14  
+
+
