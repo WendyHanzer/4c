@@ -37,10 +37,13 @@ void Texture::Bind(GLenum TextureUnit){
 	glBindTexture(mtextureTarget, mtextureObj);
 	} 
 	
+<<<<<<< HEAD
 Object::Object()
     {
     
     }
+=======
+>>>>>>> e61a61e35d7c282a10a022494c6d57f96f60cfab
 
 bool Object::bind(int index)
     {

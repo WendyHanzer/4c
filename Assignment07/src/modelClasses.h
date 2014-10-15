@@ -30,6 +30,8 @@ struct bodyData
     float radius; // of planet
     float revolutionRadius; // orbit raduis
     float revolutionTilt; // tilt of orbit
+    bool isMoon;
+    int parentInd;
 };
 
 //--Data types
@@ -53,13 +55,18 @@ class Object
 {
     public:
         Object();
+<<<<<<< HEAD
         bool bind(int index);
+=======
+        bool bind();
+>>>>>>> e61a61e35d7c282a10a022494c6d57f96f60cfab
         void render();
         bool load(std::string objName); //load obj model and texture info
         void tick(float dt);
+        
+        char *name;
+        bodyData planetData;
 
-
-    private:
         // model
         meshData *mesh;
         glm::mat4 modelMatrix;
@@ -69,12 +76,7 @@ class Object
         Texture *Texs;
 
         // other
-        char *name;
-        bodyData planetData;
         GLuint bufferName;
-
-        // moon stuff
-        bool isMoon;
 };
 
 #endif
