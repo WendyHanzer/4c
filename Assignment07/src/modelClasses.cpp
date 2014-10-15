@@ -6,6 +6,7 @@
 #include <Magick++.h>
 #include <string>
 #include <vector>
+#include <stdio.h>
 
 #include <assimp/Importer.hpp>  //Asset Importer
 #include <assimp/scene.h>		//Asset Importer scene graph aiScene object
@@ -18,9 +19,10 @@ Texture::Texture(GLenum TextureTarget, const std::string& FileName)
 	{
 	mtextureTarget = TextureTarget;
 	mfileName = FileName;
+    mfileName = "texture/" + mfileName;
 	}
 
-bool Texture::Load(){ cout<<"test"<<endl;
+bool Texture::Load(){
 	try{
 		mimage.read(mfileName);
 		mimage.write(&mblob, "RGBA");
@@ -28,8 +30,8 @@ bool Texture::Load(){ cout<<"test"<<endl;
 	catch (Magick::Error& Error){
 		cout<<"Didn't load texture"<<mfileName<<Error.what()<<endl;
 		return false;
-		}cout<<"test2"<<endl;
-	glGenTextures(1, &mtextureObj);cout<<"test3"<<endl;
+		}
+	glGenTextures(1, &mtextureObj);
 	glBindTexture(mtextureTarget, mtextureObj);
 	glTexImage2D(mtextureTarget, 0, GL_RGBA, mimage.columns(), mimage.rows(), 0, GL_RGBA, GL_UNSIGNED_BYTE, mblob.data());
 	glTexParameterf(mtextureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -62,7 +64,7 @@ void Object::render()
      // something
     }
 
-bool Object::load(std::string objName)
+bool Object::load(char *objName)
     {
 	Assimp::Importer importer; //sets up assimp
 	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);  //reads from file

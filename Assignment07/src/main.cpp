@@ -284,31 +284,31 @@ void top_menu(int id){
 bool initialize(int argc, char **argv)
 {
     // get object data
-    readInPlanets(argv[3]);cout<<"something"<<endl;
+    readInPlanets(argv[3]);
 
     char* pathName = new char[256];
-
+cerr<<"made it -1"<<endl;///////////////////sometimes seg faults in load
     // load model data for each object
     for(unsigned int i = 0; i < indepPlanets.size(); i++)
         {
-         sprintf(pathName, "/texture/%s.obj", indepPlanets[i].name);
+         sprintf(pathName, "texture/%s.obj", indepPlanets[i].name);
          indepPlanets[i].load(pathName);
         }
     for(unsigned int j = 0; j < depPlanets.size(); j++)
         {
-         sprintf(pathName, "/texture/%s.obj", depPlanets[j].name);
+         sprintf(pathName, "texture/%s.obj", depPlanets[j].name);
          depPlanets[j].load(pathName);
         }
-
+cerr<<"made it"<<endl;
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-
+cerr<<"made it1"<<endl; // sometimes seg faults in shader loader
     //Shader Sources
     //TODO: make shader into a class so you can init and make stored shaders
     // Note the added uniform!
     const char *vs = shaderloader(argv[1]);
     const char *fs = shaderloader(argv[2]);
-
+cerr<<"made it2"<<endl;
     //compile the shaders
     GLint shader_status;
 
@@ -451,7 +451,7 @@ void readInPlanets(const char* fileName)
 	if (file.is_open())
 	{
 		//get the stuff
-        for(int i = 0; i < 2; i++)
+        for(int i = 0; i < 1; i++)
         {
             planet = new Object;
 
@@ -461,7 +461,7 @@ void readInPlanets(const char* fileName)
             //if readObj is the sun it has different variables
             if(strcmp (readObj, "sun") == 0)
 			{
-                strcpy(planet->name, readObj); cout<<planet->name<<endl;
+                strcpy(planet->name, readObj);
                 file >> readObj;
                 file >> readValue;
                 planet->planetData.selfSpin = readValue;
@@ -475,15 +475,14 @@ void readInPlanets(const char* fileName)
                 planet->planetData.revolutionTilt = 0;
                 planet->planetData.revolutionRadius = 0;
                 planet->planetData.isMoon = 0;
-                planet->planetData.parentInd = 0;
-                planet->parent = &(indepPlanets[currentPlanet]);
+                planet->planetData.parent = NULL;
                 indepPlanets.push_back(*planet);
                 currentPlanet++;
             }
 
             else 
 			{
-                strcpy(planet->name, readObj); cout<<planet->name<<endl;
+                strcpy(planet->name, readObj);
 				//this is a planet or moon
 				//assign planet name to obj
                 file >> readObj;
@@ -509,8 +508,7 @@ void readInPlanets(const char* fileName)
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
-		            planet->planetData.parentInd = 0; 
-                    planet->parent = &(indepPlanets[currentPlanet]);
+                    planet->planetData.parent = NULL;
                 	indepPlanets.push_back(*planet);
                 	currentPlanet++;
 
@@ -535,15 +533,14 @@ void readInPlanets(const char* fileName)
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
-		            planet->planetData.parentInd = currentPlanet;
-                    planet->parent = &(indepPlanets[currentPlanet]);
+                    planet->planetData.parent = &(indepPlanets[currentPlanet]);
 		            depPlanets.push_back(*planet);
 
                 }
-            }cout<<"END"<<endl;
+            }
       
         }
-        file.close(); cout<<"EXIT"<<endl;
+        file.close();
 	}
 	
 	else

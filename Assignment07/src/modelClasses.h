@@ -50,7 +50,7 @@ struct bodyData
     float revolutionRadius; // orbit raduis
     float revolutionTilt; // tilt of orbit
     bool isMoon;
-    int parentInd;
+    Object* parent;
 };
 
 class Object
@@ -61,12 +61,11 @@ class Object
         bool bind(int index);
         bool bind();
         void render();
-        bool load(std::string objName); //load obj model and texture info
+        bool load(char *objName); //load obj model and texture info
         void tick(float dt);
         
         char *name;
         bodyData planetData;
-        Object *parent;
 
         // model
         meshData *mesh;
