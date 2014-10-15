@@ -476,8 +476,9 @@ void readInPlanets(const char* fileName)
                 planet->planetData.revolutionRadius = 0;
                 planet->planetData.isMoon = 0;
                 planet->planetData.parentInd = 0;
-                planet->moons = &depPlanets;
+                planet->parent = &(indepPlanets[currentPlanet]);
                 indepPlanets.push_back(*planet);
+                currentPlanet++;
             }
 
             else 
@@ -489,9 +490,7 @@ void readInPlanets(const char* fileName)
                 file >> readValue;
                 //this is a planet
                 if (readValue == 0)
-                {
-                	currentPlanet++;
-                	
+                {                	
 		            file >> readObj;
 		            file >> readValue;
                 	planet->planetData.selfSpin = readValue;
@@ -511,8 +510,9 @@ void readInPlanets(const char* fileName)
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
 		            planet->planetData.parentInd = 0; 
-                    planet->moons = &depPlanets;       
+                    planet->parent = &(indepPlanets[currentPlanet]);
                 	indepPlanets.push_back(*planet);
+                	currentPlanet++;
 
                 }
                 else
@@ -536,7 +536,7 @@ void readInPlanets(const char* fileName)
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
 		            planet->planetData.parentInd = currentPlanet;
-                    planet->moons = &depPlanets;
+                    planet->parent = &(indepPlanets[currentPlanet]);
 		            depPlanets.push_back(*planet);
 
                 }

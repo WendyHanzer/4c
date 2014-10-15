@@ -66,7 +66,7 @@ class Object
         
         char *name;
         bodyData planetData;
-        vector<Object> *moons;
+        Object *parent;
 
         // model
         meshData *mesh;
