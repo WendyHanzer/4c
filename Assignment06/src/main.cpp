@@ -82,12 +82,13 @@ struct Object
     char *name;
     unsigned int NumVert;
     Texture *Texs;
+    GLuin vbo_Geo;
 };
 //--Evil Global variables
 //Just for this example!
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
-GLuint vbo_geometry;// VBO handle for our geometry
+//GLuint vbo_geometry;// VBO handle for our geometry
 Object *OBJ;
 double isRotate = 0.0;
 //uniform locations
@@ -305,7 +306,7 @@ bool initialize(int argc, char **argv)
     // Initialize basic geometry and shaders for this example
 	OBJ = modelLoader(argv[3]);
 	//
-    // Create a Vertex Buffer object to store this vertex info on the GPU*/
+    /* Create a Vertex Buffer object to store this vertex info on the GPU/
     glGenBuffers(1, &vbo_geometry);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
     glBufferData(GL_ARRAY_BUFFER, OBJ[0].NumVert*24, OBJ[0].Geo, GL_STATIC_DRAW);
@@ -479,7 +480,12 @@ Object *modelLoader(char *objName)
 		   	/*cout<<output[meshindex].Geo[Index].position[0]<<" : "
 		   		<<output[meshindex].Geo[Index].position[1]<<" : "
 		   		<<output[meshindex].Geo[Index].position[2]<<endl;
+		  
 		*/}
+	glGenBuffers(1, &output[meshindex].vbo_Geo);
+    glBindBuffer(GL_ARRAY_BUFFER, output[meshindex].vbo_geo);
+    glBufferData(GL_ARRAY_BUFFER, OBJ[meshindex].NumVert*24,
+                     OBJ[meshindex].Geo, GL_STATIC_DRAW);
 	}
 	return(output);
 	}
