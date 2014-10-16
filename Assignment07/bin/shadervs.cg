@@ -1,8 +1,8 @@
-#version 330
-in vec3 v_position;
-in vec2 v_tex;
 
-out vec2 Tex_cord;
+attribute vec3 v_position;
+attribute vec2 v_tex;
+
+varying vec2 Tex_cord;
 uniform mat4 mvpMatrix;
 //out vec4 gl_Pos;
 

@@ -64,7 +64,7 @@ class Object
         bool load(char *objName); //load obj model and texture info
         void tick(float dt);
         
-        char *name;
+        char name[50];
         bodyData planetData;
 
         // model

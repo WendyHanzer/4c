@@ -66,29 +66,39 @@ void Object::render()
 
 bool Object::load(char *objName)
     {
+cerr<<"well its here"<<endl;
 	Assimp::Importer importer; //sets up assimp
+cerr<<objName<<endl;
 	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);  //reads from file
+cerr<<"importer read file"<<endl;
 	mesh = new meshData[scene->mNumMeshes];  //make mesh array the size of meshes in file
+cerr<<"num meshes"<<endl;
 	numMesh = scene->mNumMeshes;  //
+	
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
+	
 	for(int meshindex =0; meshindex < numMesh; meshindex++){
 	    //set up mesh array for number of meshes in scene since we trianglated vertiecs are already in face order
 	    mesh[meshindex].NumVert = scene->mMeshes[meshindex]->mNumVertices;
 		mesh[meshindex].Geo = new Vertex[(mesh[meshindex].NumVert)];
+cerr<<"well its here2"<<endl;
 	    
 	    const aiMaterial* mat = scene->mMaterials[scene->mMeshes[meshindex]->mMaterialIndex];
 	    
 	    if (mat->GetTextureCount(aiTextureType_DIFFUSE) > 0){ //does the mesh have a material
 	    	aiString Path;
+	    	
 	    	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {  //get path of the texture
 	    		std::string fullpath = Path.data;
 	    		mesh[meshindex].Texs = new Texture(GL_TEXTURE_2D, fullpath.c_str());
+	    		
 	    		if (mesh[meshindex].Texs->Load())
 	    			cout<<"Success"<<endl;
 	    		else
 	    		    return false;
 	    		}
 	    	}
+	    	
 	    for (unsigned int Index = 0; Index < mesh[meshindex].NumVert; Index++){
 	    	const aiVector3D* pTexCoords = scene->mMeshes[meshindex]-> HasTextureCoords(0) ? &(scene->mMeshes[meshindex]->mTextureCoords[0][Index]): &Zero3D;  //puts in texture cords or empty if none exist from texture tut 16
 		    mesh[meshindex].Geo[Index]
@@ -103,6 +113,7 @@ bool Object::load(char *objName)
                 mesh[meshindex].Geo, GL_STATIC_DRAW);
 
 	}
+cerr<<"made it out of load"<<endl;
     return true;
     }
 
