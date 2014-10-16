@@ -213,7 +213,7 @@ void update()
     // get DT
     float dt = getDT();
     dt *= timeScale;
-    float lerpTime = 0.08;
+    float lerpTime = 0.2;
 
     // update indep bodies
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
@@ -436,7 +436,7 @@ bool initialize(int argc, char **argv)
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 60.0, -20.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 60.0, -60.0), //Eye Position
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Z is up
 
