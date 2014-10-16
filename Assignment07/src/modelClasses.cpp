@@ -37,12 +37,6 @@ void Texture::Bind(GLenum TextureUnit){
 	glBindTexture(mtextureTarget, mtextureObj);
 	} 
 	
-Object::Object(GLuint buffer, bool moon)
-    {
-     bufferName = buffer;
-
-     isMoon = moon;
-    }
 
 bool Object::bind()
     {

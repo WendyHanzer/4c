@@ -441,9 +441,10 @@ void readInPlanets(const char* fileName)
 	ifstream file;
     char readObj [100];
     float readValue = 0.0;
+    int currentPlanet = 0;
     
     //data in object is private, make functions or put in public??
-    Object planet(buffer?, false);
+    Object planet();
 	
 	
 	file.open (fileName);
@@ -468,61 +469,72 @@ void readInPlanets(const char* fileName)
                 file >> readObj;
                 file >> readValue;
                 planet.planetData.radius = readValue;
+                planet.planetData.revolution = 0;
+                planet.planetData.revolutionTilt = 0;
+                planet.planetData.revolutionRadius = 0;
+                planet.planetData.isMoon = 0;
+                planet.planetData.parentInd = 0;
                 
                 indepPlanets.push_back(planet);
-            }
-			//if read object is a moon have to create an obj with bool moon true
-            else if(strcmp (readObj, "Moon") == 0)	//check each name of moon
-			{
-				//mark that this is a moon in obj bool
-                planet.isMoon = true;
-                
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.selfSpin = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.revolution = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.axisTilt = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.radius = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.revolutionRadius = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.revolutionTilt = readValue;
-                
-                depPlanets.push_back(planet);
             }
 
             else 
 			{
-				//this is a planet
+				//this is a planet or moon
 				//assign planet name to obj
                 file >> readObj;
                 file >> readValue;
-                planet.planetData.selfSpin = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.revolution = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.axisTilt = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.radius = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.revolutionRadius = readValue;
-                file >> readObj;
-                file >> readValue;
-                planet.planetData.revolutionTilt = readValue;
-                
-                indepPlanets.push_back(planet);
+                //this is a planet
+                if (readValue == 0)
+                {
+                	currentPlanet++;
+                	
+		            file >> readObj;
+		            file >> readValue;
+                	planet.planetData.selfSpin = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.revolution = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.axisTilt = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.radius = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.revolutionRadius = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.revolutionTilt = readValue;
+		            
+                	indepPlanets.push_back(planet);
+		            planet.planetData.parentInd = 0;
+                }
+                else
+                {	
+                	file >> readObj;
+		            file >> readValue;
+		            planet.planetData.selfSpin = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.revolution = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.axisTilt = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.radius = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.revolutionRadius = readValue;
+		            file >> readObj;
+		            file >> readValue;
+		            planet.planetData.revolutionTilt = readValue;
+		            
+		            depPlanets.push_back(planet);
+		            planet.planetData.parentInd = currentPlanet;
+                }
             }
       
         }

@@ -4,6 +4,7 @@ Sun
 	Radius 696000  
 
 Mercury
+	isMoon 0
 	Self-spin 0.000071048
 	Revolution 0.000047365 
 	Axial_tilt 2.11 
@@ -12,6 +13,7 @@ Mercury
 	Revolution_tilt_angle 3.38 
 
 Venus
+	isMoon 0
 	Self-spin -0.000017145 
 	Revolution 0.000018601 
 	Axial_tilt 177.36 
@@ -20,6 +22,7 @@ Venus
 	Revolution_tilt_angle 3.86 
 
 Earth
+	isMoon 0
 	Self-spin .00007292
 	Revolution .00001145833 
 	Axial_tilt 23
@@ -28,6 +31,7 @@ Earth
 	Revolution_tilt_angle 7.25  
 
 Moon
+	isMoon 1
 	Self-spin .00015252
 	Axial_tilt 6.687
 	revolution -.000154321   
@@ -36,6 +40,7 @@ Moon
 	Radius 1737.5  
 
 Mars
+	isMoon 0
 	Self-spin 0.0040610786224821 
 	Revolution  .00000495092993100945  
 	Axial_tilt 25.19 
@@ -44,6 +49,7 @@ Mars
 	Revolution_tilt_angle 5.65    
 
 Demos
+	isMoon 1
 	Self-spin 0.013065328 
 	Revolution 0.013065328  
 	Axial_tilt 0 
@@ -52,6 +58,7 @@ Demos
 	Revolution_tilt_angle 1.093  
 
 Phobos
+	isMoon 1
 	Self-spin 0.003300487 
 	Revolution 0.003300487  
 	Axial_tilt 0 
@@ -60,6 +67,7 @@ Phobos
 	Revolution_tilt_angle 0.93
 
 Jupiter
+	isMoon 0
 	Self-spin 0.0100755667506297 
 	Revolution .00001044591522930873   
 	Axial_tilt 3.13
@@ -68,6 +76,7 @@ Jupiter
 	Revolution_tilt_angle 6.09  
 
 Io
+	isMoon 1
 	Self-spin 0.00235519624284745601305395817636 
 	Revolution 0.00235519624284745601305395817636    
 	Axial_tilt 0 
@@ -76,6 +85,7 @@ Io
 	Revolution_tilt_angle 0.05  
 
 Callisto
+	isMoon 1
 	Self-spin 0.00117331857164154832698282212604 
 	Revolution 0.00117331857164154832698282212604    
 	Axial_tilt 0 
@@ -84,6 +94,7 @@ Callisto
 	Revolution_tilt_angle 0.47  
 
 Ganymede
+	isMoon 1
 	Self-spin .0013249166
 	Revolution .0013249166    
 	Axial_tilt 0 
@@ -92,6 +103,7 @@ Ganymede
 	Revolution_tilt_angle 0.17  
 
 Europa
+	isMoon 1
 	Self-spin  .00065759259
 	Revolution .00065759259    
 	Axial_tilt 0 
@@ -100,6 +112,7 @@ Europa
 	Revolution_tilt_angle 0.47   
 
 Saturn 
+	isMoon 0
 	Self-spin 0.00949126803340926347760060744115 
 	Revolution  .000000355073287 
 	Axial_tilt 26.73 
@@ -108,14 +121,16 @@ Saturn
 	Revolution_tilt_angle 2.485 
 
 Titan
+	isMoon 1
 	Self-spin .0029475
-	Revolution .0029475   
+	Revolution -.0029475   
 	Axial_tilt 0 
 	Radius 2574.7 
 	Revolution_radius 1221865 
 	Revolution_tilt_angle 0.3   
 
 Rhea
+	isMoon 1
 	Self-spin .00083666
 	Revolution .00083666  
 	Axial_tilt 0 
@@ -124,6 +139,7 @@ Rhea
 	Revolution_tilt_angle 0.33    
 
 Iapetus
+	isMoon 1
 	Self-spin .0146907
 	Revolution .0146907  
 	Axial_tilt 0 
@@ -132,6 +148,7 @@ Iapetus
 	Revolution_tilt_angle 8.313    
 
 Dione
+	isMoon 1
 	Self-spin .0005068
 	Revolution .0005068  
 	Axial_tilt 0 
@@ -140,6 +157,7 @@ Dione
 	Revolution_tilt_angle .028  
 
 Uranus
+	isMoon 0
 	Self-spin -0.00580049095355430883669993828278 
 	Revolution .00000013528536038694210549584871460238    
 	Axial_tilt 97.77 
@@ -148,6 +166,7 @@ Uranus
 	Revolution_tilt_angle 6.48 
 
 Prospero
+	isMoon 1
 	Self-spin 0.0124365487283877656198077409059 
 	Revolution 0.0124365487283877656198077409059    
 	Axial_tilt 0 
@@ -156,6 +175,7 @@ Prospero
 	Revolution_tilt_angle 0.08479  
 
 Stephano
+	isMoon 1
 	Self-spin 0.0110694898293527447906980863066 
 	Revolution 0.0110694898293527447906980863066    
 	Axial_tilt 0 
@@ -164,6 +184,7 @@ Stephano
 	Revolution_tilt_angle 0.093  
 
 Neptune
+	isMoon 0
 	Self-spin 0.0069444 
 	Revolution .00000006906731    
 	Axial_tilt 28.32 
@@ -172,6 +193,7 @@ Neptune
 	Revolution_tilt_angle 6.43  
 
 Triton
+	isMoon 1
 	Self-spin 0.01417233560090702947845804988662 
 	Revolution -0.01417233560090702947845804988662    
 	Axial_tilt 0 
@@ -180,6 +202,7 @@ Triton
 	Revolution_tilt_angle 4.746  
 
 Thalassa
+	isMoon 1
 	Self-spin 0.01339764201500535905680600214362 
 	Revolution 0.01339764201500535905680600214362    
 	Axial_tilt 0 
@@ -188,11 +211,15 @@ Thalassa
 	Revolution_tilt_angle 0.209  
 
 Pluto
+	isMoon 0
 	Self-spin -.0011828
 	Revolution .0028406    
 	Axial_tilt 0 
 	Radius 1151 
 	Revolution_radius 590644628 
 	Revolution_tilt_angle 17.14  
+
+
+
 
 

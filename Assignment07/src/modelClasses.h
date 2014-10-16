@@ -31,6 +31,8 @@ struct bodyData
     float radius; // of planet
     float revolutionRadius; // orbit raduis
     float revolutionTilt; // tilt of orbit
+    bool isMoon;
+    int parentInd;
 };
 
 //--Data types
@@ -53,14 +55,15 @@ class Texture{  //CLASS FROM OGLDEV_TEXTURE
 class Object
 {
     public:
-        Object(GLuint buffer, bool moon);
+        Object();
         bool bind();
         void render();
         bool load(std::string objName); //load obj model and texture info
         void tick(float dt);
+        
+        char *name;
+        bodyData planetData;
 
-
-    private:
         // model
         meshData mesh;
         glm::mat4 modelMatrix;
@@ -69,12 +72,7 @@ class Object
         Texture *Texs;
 
         // other
-        char *name;
-        bodyData planetData;
         GLuint bufferName;
-
-        // moon stuff
-        bool isMoon;
 };
 
 #endif
