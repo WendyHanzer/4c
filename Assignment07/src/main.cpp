@@ -498,7 +498,7 @@ void readInPlanets(const char* fileName)
 		            planet->planetData.revolution = readValue * (3.14159/180.0);
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.axisTilt = readValue;
+		            planet->planetData.axisTilt = readValue * (3.14159/180.0);
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.radius = 2;
@@ -507,7 +507,7 @@ void readInPlanets(const char* fileName)
 		            planet->planetData.revolutionRadius = 6;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionTilt = readValue;
+		            planet->planetData.revolutionTilt = readValue * (3.14159/180.0);
                     planet->planetData.parent = NULL;
                     
                 	indepPlanets.push_back(*planet);
@@ -519,13 +519,13 @@ void readInPlanets(const char* fileName)
                 {	
                 	file >> readObj;
 		            file >> readValue;
-		            planet->planetData.selfSpin = readValue * 100;
+		            planet->planetData.selfSpin = readValue * (3.14159/180.0);
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolution = readValue * 100;
+		            planet->planetData.revolution = readValue * (3.14159/180.0);
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.axisTilt = readValue;
+		            planet->planetData.axisTilt = readValue * (3.14159/180.0);
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.radius = 1;
@@ -534,7 +534,7 @@ void readInPlanets(const char* fileName)
 		            planet->planetData.revolutionRadius = 5;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionTilt = readValue;
+		            planet->planetData.revolutionTilt = readValue * (3.14159/180.0);
                     planet->planetData.parent = &(indepPlanets[currentPlanet]);
 		            depPlanets.push_back(*planet);
 
