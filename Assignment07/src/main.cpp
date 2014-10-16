@@ -164,17 +164,18 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
     // render each indepPlanet
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
         {
-        for(unsigned int meshindex =0; meshindex < indepPlanets.size(); meshindex++){
+        //for(unsigned int meshindex =0; meshindex < indepPlanets.size(); meshindex++)
+        //{
          // generate MVP
-         mvp = projection * view * indepPlanets[meshindex].modelMatrix;
+         mvp = projection * view * indepPlanets[i].modelMatrix;
          glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
          // bind geometry and texture
-         indepPlanets[meshindex].bind(meshindex);
+         indepPlanets[i].bind(0);
 
          // draw 
-         glDrawArrays(GL_TRIANGLES, 0, indepPlanets[meshindex].mesh[meshindex].NumVert);
+         glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[0].NumVert);
          //mode, starting index, count
-         }
+         //}
         }
 
     // redner each depPlanet
@@ -287,7 +288,7 @@ bool initialize(int argc, char **argv)
     readInPlanets(argv[3]);
 
     char* pathName = new char[256];
-    
+
     // load model data for each object
     for(unsigned int i = 0; i < indepPlanets.size(); i++)
         {
@@ -336,7 +337,8 @@ bool initialize(int argc, char **argv)
         std::cerr << "[F] FAILED TO COMPILE FRAGMENT SHADER!" << std::endl;
         return false;
     } //sed to store and transform them. 
-    //Now we link the 2 shader objects into a program
+    
+    //Now we link the to shader objects into a program
     //This program is what is run on the GPU
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
@@ -449,7 +451,7 @@ void readInPlanets(const char* fileName)
 	if (file.is_open())
 	{
 		//get the stuff
-        for(int i = 0; i < 1; i++)
+        for(int i = 0; i < 6; i++)
         {
             planet = new Object;
 
@@ -468,7 +470,7 @@ void readInPlanets(const char* fileName)
                 planet->planetData.axisTilt = readValue;
                 file >> readObj;
                 file >> readValue;
-                planet->planetData.radius = 5;
+                planet->planetData.radius = 4;
                 planet->planetData.revolution = 0;
                 planet->planetData.revolutionTilt = 0;
                 planet->planetData.revolutionRadius = 0;
@@ -490,24 +492,26 @@ void readInPlanets(const char* fileName)
                 {                	
 		            file >> readObj;
 		            file >> readValue;
-                	planet->planetData.selfSpin = readValue;
+                	planet->planetData.selfSpin = readValue * (3.14159/180.0);
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolution = readValue;
+		            planet->planetData.revolution = readValue * (3.14159/180.0);
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.axisTilt = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.radius = readValue;
+		            planet->planetData.radius = 2;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionRadius = readValue;
+		            planet->planetData.revolutionRadius = 6;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
                     planet->planetData.parent = NULL;
+                    
                 	indepPlanets.push_back(*planet);
+                	
                 	currentPlanet++;
 
                 }
@@ -515,19 +519,19 @@ void readInPlanets(const char* fileName)
                 {	
                 	file >> readObj;
 		            file >> readValue;
-		            planet->planetData.selfSpin = readValue;
+		            planet->planetData.selfSpin = readValue * 100;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolution = readValue;
+		            planet->planetData.revolution = readValue * 100;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.axisTilt = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.radius = readValue;
+		            planet->planetData.radius = 1;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionRadius = readValue;
+		            planet->planetData.revolutionRadius = 5;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;

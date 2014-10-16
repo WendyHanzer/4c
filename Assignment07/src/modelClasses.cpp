@@ -107,6 +107,7 @@ cerr<<objName<<endl;
     glBindBuffer(GL_ARRAY_BUFFER, mesh[meshindex].bufferName);
     glBufferData(GL_ARRAY_BUFFER, mesh[meshindex].NumVert*24,
                 mesh[meshindex].Geo, GL_STATIC_DRAW);
+cerr << "out" << endl;
 
 	}
     return true;
