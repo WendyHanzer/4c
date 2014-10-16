@@ -1,0 +1,34 @@
+planetBodies: 4
+
+sun
+	Self-spin .5
+	Axial_tilt 0.1265363708 
+	Radius 5  
+
+earth
+	isMoon 0
+	Self-spin 6.2831
+	Revolution 3.1415926536 
+	Axial_tilt 0.401425728
+	Radius 1
+	Revolution_radius 15 
+	Revolution_tilt_angle 0.1265363708  
+
+moon
+	isMoon 1
+	Self-spin 3.1415926536
+	revolution -3.1415926536 
+	Axial_tilt 0.1167101671
+	Radius 0.2724    
+	Revolution_radius 3
+	Revolution_tilt_angle 0.1167101671 
+
+jupiter
+	isMoon 0
+	Self-spin 6.2831
+	Revolution 3.1415926536 
+	Axial_tilt 0.401425728
+	Radius 4
+	Revolution_radius 25 
+	Revolution_tilt_angle 0.1265363708  
+

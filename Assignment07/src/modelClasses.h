@@ -63,6 +63,7 @@ class Object
         void render();
         bool load(char *objName); //load obj model and texture info
         void tick(float dt);
+        glm::vec3 getPosition();
         
         char name[50];
         bodyData planetData;

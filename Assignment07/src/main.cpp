@@ -33,7 +33,7 @@ using namespace std;
 	
 //--Evil Global variables
 //Just for this example!
-int w = 640, h = 480;// Window size
+int w = 1200, h = 600;// Window size
 GLuint program;// The GLSL program handle
 //GLuint vbo_geometry;// VBO handle for our geometry
 Object *OBJ;
@@ -55,6 +55,10 @@ glm::mat4 mvp;//premultiplied modelviewprojection
 //------------------------New Globals-----------------------------
 vector<Object> indepPlanets;
 vector<Object> depPlanets;
+
+float timeScale = 1.0;
+glm::vec3 cameraLookAt;
+glm::vec3 cameraPosition;
 //----------------------------------------------------------------
 
 //read in planet info
@@ -79,6 +83,8 @@ float getDT();
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 
 const char *shaderloader(char *input);
+
+float lerp(float start, float end, float time);
 
 //--Main
 int main(int argc, char **argv)
@@ -116,7 +122,7 @@ int main(int argc, char **argv)
 	glutAddMenuEntry("Quit", 2);
 	//sub_menu = glut
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	srand(getDT());
+	//srand(getDT());
     // Initialize all of our resources(shaders, geometry)
     bool init = initialize(argc, argv);
     if(init)
@@ -131,12 +137,12 @@ int main(int argc, char **argv)
 }
 
 //--Implementations
-void render() //-----------TODO UPDATE THIS THING PLS----------------
+void render() 
 {
     //--Render the scene
 
     //clear the screen
-    glClearColor(0.0, 0.0, 0.2, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //enable the shader program
@@ -205,6 +211,7 @@ void update()
 {
     // get DT
     float dt = getDT();
+    dt *= timeScale;
 
     // update indep bodies
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
@@ -238,13 +245,30 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 {
     // Handle keyboard input
     if((key == 27)||(key == 'q')||(key == 'Q'))//ESC
-        exit(0);
-    else if ((key == 'a')||(key == 'A')) //menu
-    	Rotation_menu(1);
-    else if ((key == 's')||(key == 'S'))
-    	Rotation_menu(2);
-    else if ((key == 'd')||(key == 'D'))
-    	Rotation_menu(3);
+        {
+         exit(0);
+        }
+    else if (key == 'r' || key == 'R')
+        {
+         if (timeScale < 3.0)
+            {
+             timeScale += 0.1;
+            }
+        }
+    else if (key == 'e' || key == 'E')
+        {
+         if (timeScale > -3.0)
+            {
+             timeScale -= 0.1;
+            }
+        }
+    else if (key == '0')
+        {
+         if (timeScale > -3.0)
+            {
+             timeScale -= 0.1;
+            }
+        }
 }
 
 void mouse(int button, int state, int x, int y){
@@ -381,7 +405,7 @@ bool initialize(int argc, char **argv)
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 10.0, -16.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 60.0, -9.0), //Eye Position
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Z is up
 
@@ -440,7 +464,9 @@ void readInPlanets(const char* fileName)
 	ifstream file;
     char readObj [100];
     float readValue = 0.0;
+    int readInt = 0;
     int currentPlanet = 0;
+    int numBodies;
     
     //data in object is private, make functions or put in public??
     Object* planet;
@@ -450,8 +476,12 @@ void readInPlanets(const char* fileName)
 	
 	if (file.is_open())
 	{
+     // get number of bodies to read in
+     file >> readObj;
+     file >> numBodies;
+
 		//get the stuff
-        for(int i = 0; i < 6; i++)
+        for(int i = 0; i < numBodies; i++)
         {
             planet = new Object;
 
@@ -464,13 +494,13 @@ void readInPlanets(const char* fileName)
                 strcpy(planet->name, readObj);
                 file >> readObj;
                 file >> readValue;
-                planet->planetData.selfSpin = readValue * 100;
+                planet->planetData.selfSpin = readValue;
                 file >> readObj;
                 file >> readValue;
                 planet->planetData.axisTilt = readValue;
                 file >> readObj;
                 file >> readValue;
-                planet->planetData.radius = 4;
+                planet->planetData.radius = readValue;
                 planet->planetData.revolution = 0;
                 planet->planetData.revolutionTilt = 0;
                 planet->planetData.revolutionRadius = 0;
@@ -486,28 +516,30 @@ void readInPlanets(const char* fileName)
 				//this is a planet or moon
 				//assign planet name to obj
                 file >> readObj;
-                file >> readValue;
+                file >> readInt;
+
+                planet->planetData.isMoon = readInt;
                 //this is a planet
-                if (readValue == 0)
+                if (readInt == 0)
                 {                	
 		            file >> readObj;
 		            file >> readValue;
-                	planet->planetData.selfSpin = readValue * (3.14159/180.0);
+                	planet->planetData.selfSpin = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolution = readValue * (3.14159/180.0);
+		            planet->planetData.revolution = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.axisTilt = readValue * (3.14159/180.0);
+		            planet->planetData.axisTilt = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.radius = 2;
+		            planet->planetData.radius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionRadius = 6;
+		            planet->planetData.revolutionRadius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionTilt = readValue * (3.14159/180.0);
+		            planet->planetData.revolutionTilt = readValue;
                     planet->planetData.parent = NULL;
                     
                 	indepPlanets.push_back(*planet);
@@ -519,23 +551,23 @@ void readInPlanets(const char* fileName)
                 {	
                 	file >> readObj;
 		            file >> readValue;
-		            planet->planetData.selfSpin = readValue * (3.14159/180.0);
+		            planet->planetData.selfSpin = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolution = readValue * (3.14159/180.0);
+		            planet->planetData.revolution = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.axisTilt = readValue * (3.14159/180.0);
+		            planet->planetData.axisTilt = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.radius = 1;
+		            planet->planetData.radius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionRadius = 5;
+		            planet->planetData.revolutionRadius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionTilt = readValue * (3.14159/180.0);
-                    planet->planetData.parent = &(indepPlanets[currentPlanet]);
+		            planet->planetData.revolutionTilt = readValue;
+                    planet->planetData.parent = &(indepPlanets[currentPlanet-1]);
 		            depPlanets.push_back(*planet);
 
                 }
@@ -552,41 +584,9 @@ void readInPlanets(const char* fileName)
     file.close();
 }
 
-/*
-Object *modelLoader(char *objName)
-	{ 
-	Object *output;
-	Assimp::Importer importer;
-	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);
-	output = new Object[scene->mNumMeshes];
-	output[0].numMesh = scene->mNumMeshes;
-	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
-	for(unsigned int meshindex =0; meshindex < scene->mNumMeshes; meshindex++){
-		output[meshindex].Geo = new Vertex[scene->mMeshes[meshindex]->mNumVertices];
-	    output[meshindex].NumVert = scene->mMeshes[meshindex]->mNumVertices;
-	    const aiMaterial* mat = scene->mMaterials[scene->mMeshes[meshindex]->mMaterialIndex];
-	    if (mat->GetTextureCount(aiTextureType_DIFFUSE) > 0){
-	    	aiString Path;
-	    	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
-	    		output[meshindex].Texs = new Texture(GL_TEXTURE_2D, Path.data);
-	    		if (output[meshindex].Texs->Load())
-	    			cout<<"Success"<<endl;
-	    		}
-	    	}
-	    for (unsigned int Index = 0; 
-	    	Index < scene->mMeshes[meshindex]->mNumVertices; 
-	    	Index++)
-        {
-	    	const aiVector3D* pTexCoords = scene->mMeshes[meshindex]-> HasTextureCoords(0) ? &(scene->mMeshes[meshindex]->mTextureCoords[0][Index]): &Zero3D;
-		    output[meshindex].Geo[Index]
-		    				  ={{scene->mMeshes[meshindex]->mVertices[Index].x,
-		                     	 scene->mMeshes[meshindex]->mVertices[Index].y,
-		                         scene->mMeshes[meshindex]->mVertices[Index].z}
-		                       ,{pTexCoords->x, -(pTexCoords->y)}}; //add texture
+float lerp(float start, float end, float time)
+    {
+     return ((1-time)*start) + (time*end);
+    }
 
-		}
-	}
-	return(output);
-	}
-*/
 
