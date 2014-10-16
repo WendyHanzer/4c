@@ -23,7 +23,7 @@ moon
 	Revolution_radius 3
 	Revolution_tilt_angle 0.1167101671 
 
-jupiter
+saturn
 	isMoon 0
 	Self-spin 6.2831
 	Revolution 3.1415926536 

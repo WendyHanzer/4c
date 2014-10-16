@@ -57,8 +57,9 @@ vector<Object> indepPlanets;
 vector<Object> depPlanets;
 
 float timeScale = 1.0;
-glm::vec3 cameraLookAt;
-glm::vec3 cameraPosition;
+glm::vec3 cameraLookAt = glm::vec3(0.0, 0.0, 0.0);
+glm::vec3 cameraPosition = glm::vec3(0.0, 60.0, -20.0);
+int lookAtIndex = 0;
 //----------------------------------------------------------------
 
 //read in planet info
@@ -212,6 +213,7 @@ void update()
     // get DT
     float dt = getDT();
     dt *= timeScale;
+    float lerpTime = 0.08;
 
     // update indep bodies
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
@@ -224,6 +226,24 @@ void update()
         {
          depPlanets[j].tick(dt);
         }
+    
+    glm::vec3 planetPos = indepPlanets[lookAtIndex].getPosition();
+
+    cameraLookAt.x = lerp(cameraLookAt.x, planetPos.x, lerpTime);
+    cameraLookAt.y = lerp(cameraLookAt.y, planetPos.y, lerpTime);
+    cameraLookAt.z = lerp(cameraLookAt.z, planetPos.z, lerpTime);
+
+    planetPos.x += 60;
+    planetPos.y += -60;
+    planetPos.z += 0;
+
+    cameraPosition.x = lerp(cameraPosition.x, planetPos.x, lerpTime);
+    cameraPosition.y = lerp(cameraPosition.y, planetPos.y, lerpTime);
+    cameraPosition.z = lerp(cameraPosition.z, planetPos.z, lerpTime);
+
+    view = glm::lookAt( cameraPosition, //Eye Position
+                        cameraLookAt, //Focus point
+                        glm::vec3(0.0, 1.0, 0.0)); //Positive Z is up
 
     glutPostRedisplay();//call the display callback
 }
@@ -264,10 +284,21 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
         }
     else if (key == '0')
         {
-         if (timeScale > -3.0)
+         if(indepPlanets.size() > 1)
             {
-             timeScale -= 0.1;
+             lookAtIndex = 0;
             }
+        }
+    else if (key == '1')
+        {
+         if(indepPlanets.size() > 2)
+            {
+             lookAtIndex = 1;
+            }
+        }
+    else if (key == ' ')
+        {
+         timeScale = 0.0;
         }
 }
 
@@ -405,7 +436,7 @@ bool initialize(int argc, char **argv)
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 60.0, -9.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 60.0, -20.0), //Eye Position
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Z is up
 
@@ -508,6 +539,7 @@ void readInPlanets(const char* fileName)
                 planet->planetData.parent = NULL;
                 indepPlanets.push_back(*planet);
                 currentPlanet++;
+                cout<<"Added "<<planet->name<<" to indep list"<<endl;
             }
 
             else 
@@ -543,7 +575,7 @@ void readInPlanets(const char* fileName)
                     planet->planetData.parent = NULL;
                     
                 	indepPlanets.push_back(*planet);
-                	
+                	cout<<"Added "<<planet->name<<" to indep list"<<endl;
                 	currentPlanet++;
 
                 }
@@ -568,6 +600,7 @@ void readInPlanets(const char* fileName)
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
                     planet->planetData.parent = &(indepPlanets[currentPlanet-1]);
+                    cout<<"Added "<<planet->name<<" to dep list with parent "<<(planet->planetData.parent->name)<<endl;
 		            depPlanets.push_back(*planet);
 
                 }

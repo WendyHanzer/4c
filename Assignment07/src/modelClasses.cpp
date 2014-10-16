@@ -67,7 +67,6 @@ void Object::render()
 bool Object::load(char *objName)
     {
 	Assimp::Importer importer; //sets up assimp
-cerr<<objName<<endl;
 	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);  //reads from file
 	mesh = new meshData[scene->mNumMeshes];  //make mesh array the size of meshes in file
 	numMesh = scene->mNumMeshes;  //
@@ -89,7 +88,7 @@ cerr<<objName<<endl;
 	    		mesh[meshindex].Texs = new Texture(GL_TEXTURE_2D, fullpath.c_str());
 	    		
 	    		if (mesh[meshindex].Texs->Load())
-	    			cout<<"Success"<<endl;
+	    			cout<<"Success loading "<<Path.data<<endl;
 	    		else
 	    		    return false;
 	    		}
@@ -107,8 +106,6 @@ cerr<<objName<<endl;
     glBindBuffer(GL_ARRAY_BUFFER, mesh[meshindex].bufferName);
     glBufferData(GL_ARRAY_BUFFER, mesh[meshindex].NumVert*24,
                 mesh[meshindex].Geo, GL_STATIC_DRAW);
-cerr << "out" << endl;
-
 	}
     return true;
     }
