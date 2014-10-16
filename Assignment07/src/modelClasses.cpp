@@ -66,13 +66,10 @@ void Object::render()
 
 bool Object::load(char *objName)
     {
-cerr<<"well its here"<<endl;
 	Assimp::Importer importer; //sets up assimp
 cerr<<objName<<endl;
 	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);  //reads from file
-cerr<<"importer read file"<<endl;
 	mesh = new meshData[scene->mNumMeshes];  //make mesh array the size of meshes in file
-cerr<<"num meshes"<<endl;
 	numMesh = scene->mNumMeshes;  //
 	
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
@@ -81,7 +78,6 @@ cerr<<"num meshes"<<endl;
 	    //set up mesh array for number of meshes in scene since we trianglated vertiecs are already in face order
 	    mesh[meshindex].NumVert = scene->mMeshes[meshindex]->mNumVertices;
 		mesh[meshindex].Geo = new Vertex[(mesh[meshindex].NumVert)];
-cerr<<"well its here2"<<endl;
 	    
 	    const aiMaterial* mat = scene->mMaterials[scene->mMeshes[meshindex]->mMaterialIndex];
 	    
@@ -113,7 +109,6 @@ cerr<<"well its here2"<<endl;
                 mesh[meshindex].Geo, GL_STATIC_DRAW);
 
 	}
-cerr<<"made it out of load"<<endl;
     return true;
     }
 

@@ -134,17 +134,17 @@ int main(int argc, char **argv)
 void render() //-----------TODO UPDATE THIS THING PLS----------------
 {
     //--Render the scene
-/*
+
     //clear the screen
     glClearColor(0.0, 0.0, 0.2, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //enable the shader program
     glUseProgram(program);
-
+/*
     // enable vertex array
     glEnableVertexAttribArray(loc_position);
-    glEnableVertexAttribArray(loc_color);
+    glEnableVertexAttribArray(loc_tex);
     
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
@@ -287,7 +287,7 @@ bool initialize(int argc, char **argv)
     readInPlanets(argv[3]);
 
     char* pathName = new char[256];
-cerr<<"made it -1"<<endl;///////////////////sometimes seg faults in load
+    
     // load model data for each object
     for(unsigned int i = 0; i < indepPlanets.size(); i++)
         {
@@ -299,16 +299,14 @@ cerr<<"made it -1"<<endl;///////////////////sometimes seg faults in load
          sprintf(pathName, "texture/%s.obj", depPlanets[j].name);
          depPlanets[j].load(pathName);
         }
-cerr<<"made it"<<endl;
+        
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-cerr<<"made it1"<<endl; // sometimes seg faults in shader loader
     //Shader Sources
     //TODO: make shader into a class so you can init and make stored shaders
     // Note the added uniform!
     const char *vs = shaderloader(argv[1]);
     const char *fs = shaderloader(argv[2]);
-cerr<<"made it2"<<endl;
     //compile the shaders
     GLint shader_status;
 
@@ -470,7 +468,7 @@ void readInPlanets(const char* fileName)
                 planet->planetData.axisTilt = readValue;
                 file >> readObj;
                 file >> readValue;
-                planet->planetData.radius = readValue;
+                planet->planetData.radius = 10;
                 planet->planetData.revolution = 0;
                 planet->planetData.revolutionTilt = 0;
                 planet->planetData.revolutionRadius = 0;
@@ -540,13 +538,14 @@ void readInPlanets(const char* fileName)
             }
       
         }
-        file.close();
 	}
 	
 	else
 	{
 		cout << "Error opening " << fileName << endl;
 	}
+	
+    file.close();
 }
 
 /*
