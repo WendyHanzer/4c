@@ -141,7 +141,7 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
 
     //enable the shader program
     glUseProgram(program);
-/*
+
     // enable vertex array
     glEnableVertexAttribArray(loc_position);
     glEnableVertexAttribArray(loc_tex);
@@ -164,15 +164,15 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
     // render each indepPlanet
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
         {
-        for(int meshindex =0; meshindex <indepPlanets.numMesh; meshindex++){
+        for(unsigned int meshindex =0; meshindex < indepPlanets.size(); meshindex++){
          // generate MVP
-         mvp = projection * view * indepPlanets[i].modelMatrix;
+         mvp = projection * view * indepPlanets[meshindex].modelMatrix;
          glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
          // bind geometry and texture
-         indepPlanets[i].bind(meshindex);
+         indepPlanets[meshindex].bind(meshindex);
 
          // draw 
-         glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[meshindex].NumVert);
+         glDrawArrays(GL_TRIANGLES, 0, indepPlanets[meshindex].mesh[meshindex].NumVert);
          //mode, starting index, count
          }
         }
@@ -187,7 +187,7 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
          depPlanets[j].bind(0);
 
          // draw 
-         glDrawArrays(GL_TRIANGLES, 0, depPlanets[i].mesh[0].NumVert);//mode, starting index, count
+         glDrawArrays(GL_TRIANGLES, 0, depPlanets[j].mesh[0].NumVert);//mode, starting index, count
          
         }
 
@@ -195,7 +195,7 @@ void render() //-----------TODO UPDATE THIS THING PLS----------------
     glDisableVertexAttribArray(loc_position);
     glDisableVertexAttribArray(loc_tex);
                       
-*/     
+    
     //swap the buffers
     glutSwapBuffers();
 }
@@ -462,13 +462,13 @@ void readInPlanets(const char* fileName)
                 strcpy(planet->name, readObj);
                 file >> readObj;
                 file >> readValue;
-                planet->planetData.selfSpin = readValue;
+                planet->planetData.selfSpin = readValue * 100;
                 file >> readObj;
                 file >> readValue;
                 planet->planetData.axisTilt = readValue;
                 file >> readObj;
                 file >> readValue;
-                planet->planetData.radius = 10;
+                planet->planetData.radius = 5;
                 planet->planetData.revolution = 0;
                 planet->planetData.revolutionTilt = 0;
                 planet->planetData.revolutionRadius = 0;
