@@ -1,34 +1,89 @@
-planetBodies: 4
+planetBodies: 9
 
 sun
-	Self-spin .5
+	Self-spin 0.5
 	Axial_tilt 0.1265363708 
-	Radius 5  
+	Radius 54  
+
+mercury
+	isMoon 0
+	Self-spin .01724
+	Revolution 5
+	Axial_tilt 0
+	Radius 0.19
+	Revolution_radius 1.9 
+	Revolution_tilt_angle 0.0 
+
+venus
+	isMoon 0
+	Self-spin -0.00409
+	Revolution 1.6
+	Axial_tilt 0.0
+	Radius .47
+	Revolution_radius 3.6 
+	Revolution_tilt_angle 0.0  
 
 earth
 	isMoon 0
-	Self-spin 6.2831
-	Revolution 3.1415926536 
-	Axial_tilt 0.401425728
-	Radius 1
-	Revolution_radius 15 
-	Revolution_tilt_angle 0.1265363708  
+	Self-spin 1
+	Revolution 1
+	Axial_tilt 0.0
+	Radius .5
+	Revolution_radius 5
+	Revolution_tilt_angle 0.0
 
-moon
-	isMoon 1
-	Self-spin 3.1415926536
-	revolution -3.1415926536 
-	Axial_tilt 0.1167101671
-	Radius 0.2724    
-	Revolution_radius 3
-	Revolution_tilt_angle 0.1167101671 
+mars
+	isMoon 0
+	Self-spin .9708
+	Revolution .55
+	Axial_tilt 0.0
+	Radius .25
+	Revolution_radius 7.6
+	Revolution_tilt_angle 0.0
+
+jupiter
+	isMoon 0
+	Self-spin 2.409
+	Revolution .084
+	Axial_tilt 0.0
+	Radius 5.5
+	Revolution_radius 26
+	Revolution_tilt_angle 0.0
 
 saturn
 	isMoon 0
-	Self-spin 6.2831
-	Revolution 3.1415926536 
-	Axial_tilt 0.401425728
-	Radius 4
-	Revolution_radius 25 
-	Revolution_tilt_angle 0.1265363708  
+	Self-spin 2.247
+	Revolution .0344
+	Axial_tilt 0.0
+	Radius 4.7
+	Revolution_radius 47
+	Revolution_tilt_angle 0.0
+
+uranus
+	isMoon 0
+	Self-spin -1.3888
+	Revolution 0.01205
+	Axial_tilt 0.0
+	Radius .11
+	Revolution_radius 95
+	Revolution_tilt_angle 0.0
+
+neptune
+	isMoon 0
+	Self-spin 1.4859
+	Revolution .00613
+	Axial_tilt 0.0
+	Radius 1.94
+	Revolution_radius 150
+	Revolution_tilt_angle 0.0
+
+pluto
+	isMoon 0
+	Self-spin 0.156
+	Revolution 0.004032
+	Axial_tilt 0.0
+	Radius .5
+	Revolution_radius 5
+	Revolution_tilt_angle 0.0
+
 
