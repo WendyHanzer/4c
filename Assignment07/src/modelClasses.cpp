@@ -128,34 +128,31 @@ void Object::tick(float dt)
 
 
      // scale planet size
-     modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(planetData.radius));
+     //
 
      if(planetData.isMoon)
-        {
-         glm::vec3 parentPos = planetData.parent->getPosition();
+        { //move moon to parent planet
+         //glm::vec3 parentPos = planetData.parent->getPosition();
 
          // add moon offset
-         modelMatrix = glm::translate(modelMatrix, parentPos);
-
-         // add orbit offset
-         modelMatrix = glm::translate(modelMatrix, 
-                                        glm::vec3(dist * sin(orbitAngle), 
-                                        0.0, 
-                                        dist * cos(orbitAngle)));
-
-         // add orbit tilt FIXME: changes the plane of where the planet is, good but not what we want.
-        //modelMatrix = glm::rotate(modelMatrix, , glm::vec3(0.0,0.0,1.0));
+         cout<<"obj name"<<name<<endl;
+         cout<<"parent name"<<planetData.parent->name<<endl;
+         cout<<"parent x"<<planetData.parent->modelMatrix[3][0]<<endl;
+         modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(
+                       planetData.parent->modelMatrix[3][0]+dist*sin(orbitAngle),
+                       planetData.parent->modelMatrix[3][1]+0.0,
+                       planetData.parent->modelMatrix[3][2]+dist*cos(orbitAngle)));
         }
      else
         {
          // dont add moon offset
-         modelMatrix = glm::translate(modelMatrix, 
+         modelMatrix = glm::translate(glm::mat4(1.0f), 
                                         glm::vec3(dist * sin(orbitAngle), 
                                         0.0, 
                                         dist * cos(orbitAngle)));
         }
 
-
+     modelMatrix = glm::scale(modelMatrix, glm::vec3(planetData.radius));
      // orbit position
      //modelMatrix = glm::translate(modelMatrix, glm::vec3(planetData.revolutionRadius * sin(orbitAngle), 0.0, planetData.revolutionRadius * cos(orbitAngle)));
     /*
