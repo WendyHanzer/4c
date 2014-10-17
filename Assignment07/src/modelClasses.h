@@ -63,7 +63,7 @@ class Object
 
         bool bind(int index);
         bool bind();
-        void render();
+        glm::mat4 render(glm::mat4 vp);
         bool load(char *objName); //load obj model and texture info
         void tick(float dt);
         glm::vec3 getPosition();

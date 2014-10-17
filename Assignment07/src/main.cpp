@@ -145,15 +145,12 @@ void render()
     //clear the screen
     glClearColor(0.0, 0.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
     //enable the shader program
     glUseProgram(program);
-
-    // enable vertex array
     glEnableVertexAttribArray(loc_position);
     glEnableVertexAttribArray(loc_tex);
-    
-    //set pointers into the vbo for each of the attributes(position and color)
+
     glVertexAttribPointer( loc_position,//location of attribute
                            3,//number of elements
                            GL_FLOAT,//type
@@ -167,23 +164,20 @@ void render()
                            GL_FALSE,
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,texuv));
-                           
-    // render each indepPlanet
-    for (unsigned int i = 0; i < indepPlanets.size(); i++)
+    
+    for (unsigned int i = 0; i< indepPlanets.size(); i++)
         {
-        //for(unsigned int meshindex =0; meshindex < indepPlanets.size(); meshindex++)
-        //{
-         // generate MVP
-         mvp = projection * view * indepPlanets[i].modelMatrix;
-         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
-         // bind geometry and texture
-         indepPlanets[i].bind(0);
-
-         // draw 
-         glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[0].NumVert);
-         //mode, starting index, count
-         //}
+        mvp = indepPlanets[i].render(projection*view);
+        glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
+        //itterate meshes
+        for (int meshindex =0; meshindex< indepPlanets[i].numMesh; meshindex++)
+            {
+            indepPlanets[i].bind(meshindex);
+            glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[meshindex].NumVert);            
+            }
         }
+            
+     
 
     // redner each depPlanet
     for (unsigned int j = 0; j < depPlanets.size(); j++)

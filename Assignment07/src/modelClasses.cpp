@@ -63,21 +63,23 @@ Object::Object()
 bool Object::bind(int index)
     {
     glBindBuffer(GL_ARRAY_BUFFER, mesh[index].bufferName);
-    mesh[index].Texs[0].Bind(GL_TEXTURE0);
+    mesh[index].Texs->Bind(GL_TEXTURE0);
      return true;
     }
 
-void Object::render()
+glm::mat4 Object::render(glm::mat4 vp)
     {
-     // something
+    return (vp* modelMatrix);
     }
 
 bool Object::load(char *objName)
     {
 	Assimp::Importer importer; //sets up assimp
 	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);  //reads from file
-	mesh = new meshData[scene->mNumMeshes];  //make mesh array the size of meshes in file
-	numMesh = scene->mNumMeshes;  //
+    
+    numMesh = scene->mNumMeshes;  //
+    cout<<"materials"<<scene->mNumMaterials<<endl;
+	mesh = new meshData[numMesh];  //make mesh array the size of meshes in file
 	
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 	
@@ -90,7 +92,7 @@ bool Object::load(char *objName)
 	    
 	    if (mat->GetTextureCount(aiTextureType_DIFFUSE) > 0){ //does the mesh have a material
 	    	aiString Path;
-	    	
+	    	cout<<mat->GetTextureCount(aiTextureType_DIFFUSE)<<endl;
 	    	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {  //get path of the texture
 	    		std::string fullpath = Path.data;
 	    		mesh[meshindex].Texs = new Texture(GL_TEXTURE_2D, fullpath.c_str());
@@ -135,9 +137,6 @@ void Object::tick(float dt)
          //glm::vec3 parentPos = planetData.parent->getPosition();
 
          // add moon offset
-         cout<<"obj name"<<name<<endl;
-         cout<<"parent name"<<planetData.parent->name<<endl;
-         cout<<"parent x"<<planetData.parent->modelMatrix[3][0]<<endl;
          modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(
                        planetData.parent->modelMatrix[3][0]+dist*sin(orbitAngle),
                        planetData.parent->modelMatrix[3][1]+0.0,
