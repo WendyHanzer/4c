@@ -3,7 +3,7 @@ planetBodies: 9
 sun
 	Self-spin 0.5
 	Axial_tilt 0.1265363708 
-	Radius .5  
+	Radius 54  
 
 mercury
 	isMoon 0
