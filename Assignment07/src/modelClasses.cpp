@@ -8,10 +8,17 @@
 #include <vector>
 #include <stdio.h>
 
+#ifdef ASSIMP_2
+#include <assimp/assimp.hpp>
+#include <assimp/aiScene.h>
+#include <assimp/aiPostProcess.h>
+
+#else
 #include <assimp/Importer.hpp>  //Asset Importer
 #include <assimp/scene.h>		//Asset Importer scene graph aiScene object
 #include <assimp/color4.h>
 #include <assimp/postprocess.h>
+#endif
 
 using namespace std;
 
