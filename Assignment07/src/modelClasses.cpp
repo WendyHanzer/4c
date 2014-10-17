@@ -117,27 +117,30 @@ void Object::tick(float dt)
 
      orbitAngle += planetData.revolution * dt;
      spinAngle += planetData.selfSpin * dt;
-
-
+     float dist = planetData.revolutionRadius;
+     
+     modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(planetData.radius));
      if(planetData.isMoon)
         {
          // add moon offset
-         modelMatrix = glm::translate(glm::mat4(1.0f), planetData.parent->getPosition());
+         modelMatrix = glm::translate(planetData.parent->modelMatrix, 
+                glm::vec3(dist*sin(orbitAngle), 0.0, dist*cos(orbitAngle)));
 
-         // add orbit tilt
-         modelMatrix = glm::rotate(modelMatrix, planetData.revolutionTilt, glm::vec3(0.0,0.0,1.0));
+         // add orbit tilt FIXME: changes the plane of where the planet is, good but not what we want.
+        //modelMatrix = glm::rotate(modelMatrix, , glm::vec3(0.0,0.0,1.0));
         }
      else
         {
          // dont add moon offset
          // add orbit tilt
-         modelMatrix = glm::rotate(glm::mat4(1.0f), planetData.revolutionTilt, glm::vec3(0.0,0.0,1.0));
+        modelMatrix = glm::translate(modelMatrix, 
+                glm::vec3(dist * sin(orbitAngle), 0.0, dist * cos(orbitAngle)));
         }
 
 
      // orbit position
-     modelMatrix = glm::translate(modelMatrix, glm::vec3(planetData.revolutionRadius * sin(orbitAngle), 0.0, planetData.revolutionRadius * cos(orbitAngle)));
-
+     //modelMatrix = glm::translate(modelMatrix, glm::vec3(planetData.revolutionRadius * sin(orbitAngle), 0.0, planetData.revolutionRadius * cos(orbitAngle)));
+    /*
      // axis tilt
      modelMatrix = glm::rotate(modelMatrix, planetData.axisTilt, glm::vec3(1.0,0.0,0.0));
 
@@ -148,7 +151,7 @@ void Object::tick(float dt)
      modelMatrix = glm::scale(modelMatrix, glm::vec3(planetData.radius));
 
 
-    }
+    */}
 
 glm::vec3 Object::getPosition()
     {

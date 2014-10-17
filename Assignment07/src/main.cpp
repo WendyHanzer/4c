@@ -143,7 +143,7 @@ void render()
     //--Render the scene
 
     //clear the screen
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(0.0, 0.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //enable the shader program
@@ -234,7 +234,7 @@ void update()
     cameraLookAt.z = lerp(cameraLookAt.z, planetPos.z, lerpTime);
 
     planetPos.x += 60;
-    planetPos.y += -60;
+    planetPos.y += 60;
     planetPos.z += 0;
 
     cameraPosition.x = lerp(cameraPosition.x, planetPos.x, lerpTime);
@@ -443,7 +443,7 @@ bool initialize(int argc, char **argv)
     projection = glm::perspective( 45.0f, //the FoV typically 90 degrees is good which is what this is set to
                                    float(w)/float(h), //Aspect Ratio, so Circles stay Circular
                                    0.01f, //Distance to the near plane, normally a small value like this
-                                   100.0f); //Distance to the far plane, 
+                                   1000.0f); //Distance to the far plane, 
 
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
