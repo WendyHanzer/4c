@@ -1,6 +1,9 @@
 #ifndef MODELCLASSES_H
 #define MODELCLASSES_H
 #define GLM_FORCE_RADIANS
+
+
+
 #include <GL/glew.h> 
 #include <GL/glut.h>
 #include <Magick++.h>
