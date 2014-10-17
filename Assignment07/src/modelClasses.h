@@ -76,6 +76,9 @@ class Object
         glm::mat4 modelMatrix;
         int numMesh;
 
+        float orbitAngle;
+        float spinAngle;
+
 };
 
 #endif

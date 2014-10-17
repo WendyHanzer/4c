@@ -55,7 +55,8 @@ void Texture::Bind(GLenum TextureUnit){
 
 Object::Object()
     {
-    
+     orbitAngle = 0;
+     spinAngle = 0;
     }
 
 
@@ -119,19 +120,28 @@ bool Object::load(char *objName)
 
 void Object::tick(float dt)
     {
-     static float orbitAngle = 0;
-     static float spinAngle = 0;
-
+     //static float orbitAngle = 0;
+     //static float spinAngle = 0;
      orbitAngle += planetData.revolution * dt;
      spinAngle += planetData.selfSpin * dt;
      float dist = planetData.revolutionRadius;
-     
+
+
+     // scale planet size
      modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(planetData.radius));
+
      if(planetData.isMoon)
         {
+         glm::vec3 parentPos = planetData.parent->getPosition();
+
          // add moon offset
-         modelMatrix = glm::translate(planetData.parent->modelMatrix, 
-                glm::vec3(dist*sin(orbitAngle), 0.0, dist*cos(orbitAngle)));
+         modelMatrix = glm::translate(modelMatrix, parentPos);
+
+         // add orbit offset
+         modelMatrix = glm::translate(modelMatrix, 
+                                        glm::vec3(dist * sin(orbitAngle), 
+                                        0.0, 
+                                        dist * cos(orbitAngle)));
 
          // add orbit tilt FIXME: changes the plane of where the planet is, good but not what we want.
         //modelMatrix = glm::rotate(modelMatrix, , glm::vec3(0.0,0.0,1.0));
@@ -139,9 +149,10 @@ void Object::tick(float dt)
      else
         {
          // dont add moon offset
-         // add orbit tilt
-        modelMatrix = glm::translate(modelMatrix, 
-                glm::vec3(dist * sin(orbitAngle), 0.0, dist * cos(orbitAngle)));
+         modelMatrix = glm::translate(modelMatrix, 
+                                        glm::vec3(dist * sin(orbitAngle), 
+                                        0.0, 
+                                        dist * cos(orbitAngle)));
         }
 
 

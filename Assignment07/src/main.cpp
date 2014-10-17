@@ -56,7 +56,7 @@ glm::mat4 mvp;//premultiplied modelviewprojection
 vector<Object> indepPlanets;
 vector<Object> depPlanets;
 
-float timeScale = 1.0;
+float timeScale = 0.1;
 glm::vec3 cameraLookAt = glm::vec3(0.0, 0.0, 0.0);
 glm::vec3 cameraPosition = glm::vec3(0.0, 60.0, -20.0);
 int lookAtIndex = 0;
@@ -213,7 +213,7 @@ void update()
     // get DT
     float dt = getDT();
     dt *= timeScale;
-    float lerpTime = 0.2;
+    float lerpTime = 0.45;
 
     // update indep bodies
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
@@ -233,9 +233,9 @@ void update()
     cameraLookAt.y = lerp(cameraLookAt.y, planetPos.y, lerpTime);
     cameraLookAt.z = lerp(cameraLookAt.z, planetPos.z, lerpTime);
 
-    planetPos.x += 60;
+    planetPos.x += 0;
     planetPos.y += 60;
-    planetPos.z += 0;
+    planetPos.z += 60;
 
     cameraPosition.x = lerp(cameraPosition.x, planetPos.x, lerpTime);
     cameraPosition.y = lerp(cameraPosition.y, planetPos.y, lerpTime);
@@ -282,18 +282,16 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
              timeScale -= 0.1;
             }
         }
-    else if (key == '0')
+    else if (key >= '0' && key <= '9')
         {
-         if(indepPlanets.size() > 1)
+         int num = key - '0';
+         if(indepPlanets.size() >= (unsigned int)num)
+            {
+             lookAtIndex = num;
+            }
+         else
             {
              lookAtIndex = 0;
-            }
-        }
-    else if (key == '1')
-        {
-         if(indepPlanets.size() > 2)
-            {
-             lookAtIndex = 1;
             }
         }
     else if (key == ' ')
@@ -442,8 +440,8 @@ bool initialize(int argc, char **argv)
 
     projection = glm::perspective( 45.0f, //the FoV typically 90 degrees is good which is what this is set to
                                    float(w)/float(h), //Aspect Ratio, so Circles stay Circular
-                                   0.01f, //Distance to the near plane, normally a small value like this
-                                   1000.0f); //Distance to the far plane, 
+                                   0.00001f, //Distance to the near plane, normally a small value like this
+                                   1000000.0f); //Distance to the far plane, 
 
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
