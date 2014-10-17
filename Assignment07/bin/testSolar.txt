@@ -17,7 +17,7 @@ mercury
 venus
 	isMoon 0
 	Self-spin -0.00409
-	Revolution -1.6
+	Revolution 1.6
 	Axial_tilt 0.0
 	Radius .47
 	Revolution_radius 3.6 
@@ -62,7 +62,7 @@ saturn
 uranus
 	isMoon 0
 	Self-spin -1.3888
-	Revolution -0.01205
+	Revolution 0.01205
 	Axial_tilt 0.0
 	Radius .11
 	Revolution_radius 95
