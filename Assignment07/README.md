@@ -1,9 +1,11 @@
 Assignment07
-
+most moon and planet textures from celestiamotherload or resources 
+using their resources, also some textures from nasa.gov as well
+uranus moon textures found @ spaceengine.org
 Moons
 Mars
-    phobos  tex     x   data x  file x
-    deimos  tex     x   data x  file x
+    phobos  tex     o   data x  file o
+    deimos  tex     o   data x  file o
 jupiter
     io      texture o   data x  file x
     europa  texture o   data x  file x
@@ -11,16 +13,16 @@ jupiter
     callistotexture o   data x  file x
 saturn
     tethys  texture o   data x  file x
-    dione   texture x   data x  file x
+    dione   texture o   data x  file x
     rhea    texture o   data x  file x
-    titan   texture x   data x  file x
-    iapetus texture x   data x  file x
+    titan   texture o   data x  file x
+    iapetus texture o   data x  file x
 uranus
-    ariel   tex x       data x  file x
-    umbriel tex x       data x  file x
-    titania tex x       data x  file x
-    oberon  tex x       data x  file x
+    ariel   tex o       data x  file x
+    umbriel tex o       data x  file x
+    titania tex o       data x  file x
+    oberon  tex o       data x  file x
 neptune
-    triton  tex x       data x  file x
+    triton  tex o       data x  file x
 pluto
-    charon  tex x       data x  file x
+    charon  tex o       data x  file x

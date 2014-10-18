@@ -90,6 +90,7 @@ float lerp(float start, float end, float time);
 //--Main
 int main(int argc, char **argv)
 {
+	cout<<sizeof(Vertex);
     // Initialize glut
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
@@ -169,16 +170,10 @@ void render()
         {
         mvp = indepPlanets[i].render(projection*view);
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
-        //itterate meshes
-        for (int meshindex =0; meshindex< indepPlanets[i].numMesh; meshindex++)
-            {
-            indepPlanets[i].bind(meshindex);
-            glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[meshindex].NumVert);            
-            }
+        indepPlanets[i].bind(0);
+        glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[0].NumVert);
         }
             
-     
-
     // redner each depPlanet
     for (unsigned int j = 0; j < depPlanets.size(); j++)
         {
@@ -347,7 +342,7 @@ bool initialize(int argc, char **argv)
          sprintf(pathName, "texture/%s.obj", depPlanets[j].name);
          depPlanets[j].load(pathName);
         }
-        
+    cout<<"models/textures loaded"<<endl;
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     //Shader Sources
@@ -543,6 +538,7 @@ void readInPlanets(const char* fileName)
                 file >> readInt;
 
                 planet->planetData.isMoon = readInt;
+                
                 //this is a planet
                 if (readInt == 0)
                 {                	

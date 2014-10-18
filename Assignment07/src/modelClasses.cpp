@@ -78,7 +78,6 @@ bool Object::load(char *objName)
 	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);  //reads from file
     
     numMesh = scene->mNumMeshes;  //
-    cout<<"materials"<<scene->mNumMaterials<<endl;
 	mesh = new meshData[numMesh];  //make mesh array the size of meshes in file
 	
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
@@ -92,7 +91,6 @@ bool Object::load(char *objName)
 	    
 	    if (mat->GetTextureCount(aiTextureType_DIFFUSE) > 0){ //does the mesh have a material
 	    	aiString Path;
-	    	cout<<mat->GetTextureCount(aiTextureType_DIFFUSE)<<endl;
 	    	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {  //get path of the texture
 	    		std::string fullpath = Path.data;
 	    		mesh[meshindex].Texs = new Texture(GL_TEXTURE_2D, fullpath.c_str());
@@ -114,7 +112,7 @@ bool Object::load(char *objName)
 		   	}
 	glGenBuffers(1, &mesh[meshindex].bufferName);
     glBindBuffer(GL_ARRAY_BUFFER, mesh[meshindex].bufferName);
-    glBufferData(GL_ARRAY_BUFFER, mesh[meshindex].NumVert*24,
+    glBufferData(GL_ARRAY_BUFFER, mesh[meshindex].NumVert*sizeof(Vertex),
                 mesh[meshindex].Geo, GL_STATIC_DRAW);
 	}
     return true;
