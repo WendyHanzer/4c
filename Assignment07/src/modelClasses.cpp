@@ -133,7 +133,10 @@ void Object::tick(float dt)
      if(planetData.isMoon)
         { //move moon to parent planet
          //glm::vec3 parentPos = planetData.parent->getPosition();
-
+/*printf("parent pos: %.2f %.2f %.2f\n", planetData.parent->modelMatrix[3][0],
+                                       planetData.parent->modelMatrix[3][1],
+                                       planetData.parent->modelMatrix[3][2]);*/
+//cout<<planetData.parent->name<<endl;
          // add moon offset
          modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(
                        planetData.parent->modelMatrix[3][0]+dist*sin(orbitAngle),
@@ -150,6 +153,7 @@ void Object::tick(float dt)
         }
 
      modelMatrix = glm::scale(modelMatrix, glm::vec3(planetData.radius));
+
      // orbit position
      //modelMatrix = glm::translate(modelMatrix, glm::vec3(planetData.revolutionRadius * sin(orbitAngle), 0.0, planetData.revolutionRadius * cos(orbitAngle)));
     /*

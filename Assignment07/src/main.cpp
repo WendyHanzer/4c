@@ -53,13 +53,14 @@ glm::mat4 projection;//eye->clip lens of the camera
 glm::mat4 mvp;//premultiplied modelviewprojection
 
 //------------------------New Globals-----------------------------
-vector<Object> indepPlanets;
-vector<Object> depPlanets;
+vector<Object*> indepPlanets;
+vector<Object*> depPlanets;
 
 float timeScale = 0.1;
 glm::vec3 cameraLookAt = glm::vec3(0.0, 0.0, 0.0);
 glm::vec3 cameraPosition = glm::vec3(0.0, 60.0, -20.0);
 int lookAtIndex = 0;
+int zoomVal = 60;
 //----------------------------------------------------------------
 
 //read in planet info
@@ -90,7 +91,6 @@ float lerp(float start, float end, float time);
 //--Main
 int main(int argc, char **argv)
 {
-	cout<<sizeof(Vertex);
     // Initialize glut
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
@@ -168,23 +168,23 @@ void render()
     
     for (unsigned int i = 0; i< indepPlanets.size(); i++)
         {
-        mvp = indepPlanets[i].render(projection*view);
+        mvp = indepPlanets[i]->render(projection*view);
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
-        indepPlanets[i].bind(0);
-        glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i].mesh[0].NumVert);
+        indepPlanets[i]->bind(0);
+        glDrawArrays(GL_TRIANGLES, 0, indepPlanets[i]->mesh[0].NumVert);
         }
             
     // redner each depPlanet
     for (unsigned int j = 0; j < depPlanets.size(); j++)
         {
          // generate MVP
-         mvp = projection * view * depPlanets[j].modelMatrix;
+         mvp = depPlanets[j]->render(projection*view);
          glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
          // bind geometry and texture
-         depPlanets[j].bind(0);
+         depPlanets[j]->bind(0);
 
          // draw 
-         glDrawArrays(GL_TRIANGLES, 0, depPlanets[j].mesh[0].NumVert);//mode, starting index, count
+         glDrawArrays(GL_TRIANGLES, 0, depPlanets[j]->mesh[0].NumVert);//mode, starting index, count
          
         }
 
@@ -207,24 +207,24 @@ void update()
     // update indep bodies
     for (unsigned int i = 0; i < indepPlanets.size(); i++)
         {
-         indepPlanets[i].tick(dt);
+         indepPlanets[i]->tick(dt);
         }
 
     // update dep bodies
     for (unsigned int j = 0; j < depPlanets.size(); j++)
         {
-         depPlanets[j].tick(dt);
+         depPlanets[j]->tick(dt);
         }
     
-    glm::vec3 planetPos = indepPlanets[lookAtIndex].getPosition();
+    glm::vec3 planetPos = indepPlanets[lookAtIndex]->getPosition();
 
     cameraLookAt.x = lerp(cameraLookAt.x, planetPos.x, lerpTime);
     cameraLookAt.y = lerp(cameraLookAt.y, planetPos.y, lerpTime);
     cameraLookAt.z = lerp(cameraLookAt.z, planetPos.z, lerpTime);
 
     planetPos.x += 0;
-    planetPos.y += 60;
-    planetPos.z += 60;
+    planetPos.y += zoomVal;
+    planetPos.z += zoomVal;
 
     cameraPosition.x = lerp(cameraPosition.x, planetPos.x, lerpTime);
     cameraPosition.y = lerp(cameraPosition.y, planetPos.y, lerpTime);
@@ -287,6 +287,20 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
         {
          timeScale = 0.0;
         }
+    else if (key == '-' || key == '_')
+        {
+         if (zoomVal < 200)
+            {
+             zoomVal += 10;
+            }
+        }
+    else if (key == '=' ||key == '+')
+        {
+         if (zoomVal > 10)
+            {
+             zoomVal -= 10;
+            }
+        }
 }
 
 void mouse(int button, int state, int x, int y){
@@ -334,13 +348,13 @@ bool initialize(int argc, char **argv)
     // load model data for each object
     for(unsigned int i = 0; i < indepPlanets.size(); i++)
         {
-         sprintf(pathName, "texture/%s.obj", indepPlanets[i].name);
-         indepPlanets[i].load(pathName);
+         sprintf(pathName, "texture/%s.obj", indepPlanets[i]->name);
+         indepPlanets[i]->load(pathName);
         }
     for(unsigned int j = 0; j < depPlanets.size(); j++)
         {
-         sprintf(pathName, "texture/%s.obj", depPlanets[j].name);
-         depPlanets[j].load(pathName);
+         sprintf(pathName, "texture/%s.obj", depPlanets[j]->name);
+         depPlanets[j]->load(pathName);
         }
     cout<<"models/textures loaded"<<endl;
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -429,8 +443,8 @@ bool initialize(int argc, char **argv)
 
     projection = glm::perspective( 45.0f, //the FoV typically 90 degrees is good which is what this is set to
                                    float(w)/float(h), //Aspect Ratio, so Circles stay Circular
-                                   0.00001f, //Distance to the near plane, normally a small value like this
-                                   1000000.0f); //Distance to the far plane, 
+                                   0.1f, //Distance to the near plane, normally a small value like this
+                                   200.0f); //Distance to the far plane, 
 
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
@@ -524,7 +538,7 @@ void readInPlanets(const char* fileName)
                 planet->planetData.revolutionRadius = 0;
                 planet->planetData.isMoon = 0;
                 planet->planetData.parent = NULL;
-                indepPlanets.push_back(*planet);
+                indepPlanets.push_back(planet);
                 currentPlanet++;
                 cout<<"Added "<<planet->name<<" to indep list"<<endl;
             }
@@ -562,7 +576,7 @@ void readInPlanets(const char* fileName)
 		            planet->planetData.revolutionTilt = readValue;
                     planet->planetData.parent = NULL;
                     
-                	indepPlanets.push_back(*planet);
+                	indepPlanets.push_back(planet);
                 	cout<<"Added "<<planet->name<<" to indep list"<<endl;
                 	currentPlanet++;
 
@@ -587,9 +601,9 @@ void readInPlanets(const char* fileName)
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
-                    planet->planetData.parent = &(indepPlanets[currentPlanet-1]);
+                    planet->planetData.parent = indepPlanets[currentPlanet-1];
                     cout<<"Added "<<planet->name<<" to dep list with parent "<<(planet->planetData.parent->name)<<endl;
-		            depPlanets.push_back(*planet);
+		            depPlanets.push_back(planet);
 
                 }
             }
