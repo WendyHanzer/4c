@@ -500,6 +500,8 @@ void readInPlanets(const char* fileName)
     int currentPlanet = 0;
     int numBodies;
     int revScale = 5;
+    int spinScale = 5;
+    float convertRads = 3.1415/180.0;
     
     //data in object is private, make functions or put in public??
     Object* planet;
@@ -527,10 +529,10 @@ void readInPlanets(const char* fileName)
                 strcpy(planet->name, readObj);
                 file >> readObj;
                 file >> readValue;
-                planet->planetData.selfSpin = readValue;
+                planet->planetData.selfSpin = readValue * spinScale * convertRads;
                 file >> readObj;
                 file >> readValue;
-                planet->planetData.axisTilt = readValue;
+                planet->planetData.axisTilt = readValue * convertRads;
                 file >> readObj;
                 file >> readValue;
                 planet->planetData.radius = readValue;
@@ -559,13 +561,13 @@ void readInPlanets(const char* fileName)
                 {                	
 		            file >> readObj;
 		            file >> readValue;
-                	planet->planetData.selfSpin = readValue;
+                	planet->planetData.selfSpin = readValue * spinScale * convertRads;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolution = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.axisTilt = readValue;
+		            planet->planetData.axisTilt = readValue * convertRads;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.radius = readValue;
@@ -574,7 +576,7 @@ void readInPlanets(const char* fileName)
 		            planet->planetData.revolutionRadius = readValue * revScale;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionTilt = readValue;
+		            planet->planetData.revolutionTilt = readValue * convertRads;
                     planet->planetData.parent = NULL;
                     
                 	indepPlanets.push_back(planet);
@@ -586,13 +588,13 @@ void readInPlanets(const char* fileName)
                 {	
                 	file >> readObj;
 		            file >> readValue;
-		            planet->planetData.selfSpin = readValue;
+		            planet->planetData.selfSpin = readValue * spinScale * convertRads;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolution = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.axisTilt = readValue;
+		            planet->planetData.axisTilt = readValue * convertRads;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.radius = readValue;
@@ -601,7 +603,7 @@ void readInPlanets(const char* fileName)
 		            planet->planetData.revolutionRadius = readValue * revScale;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionTilt = readValue;
+		            planet->planetData.revolutionTilt = readValue * convertRads;
                     planet->planetData.parent = indepPlanets[currentPlanet-1];
                     cout<<"Added "<<planet->name<<" to dep list with parent "<<(planet->planetData.parent->name)<<endl;
 		            depPlanets.push_back(planet);
