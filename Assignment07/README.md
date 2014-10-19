@@ -35,6 +35,9 @@ Time scale can be increased with 'r' and decreased with 'e'
 
 You can zoom in with '=' and zoom out with '-'
 
+Other
+-----
+
 There are provided models with a material files in bin/textures
 
 Using assimp for model Loading
