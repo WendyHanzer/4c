@@ -37,7 +37,6 @@ int w = 1200, h = 600;// Window size
 GLuint program;// The GLSL program handle
 //GLuint vbo_geometry;// VBO handle for our geometry
 Object *OBJ;
-double isRotate = 0.0;
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 
@@ -61,6 +60,7 @@ glm::vec3 cameraLookAt = glm::vec3(0.0, 0.0, 0.0);
 glm::vec3 cameraPosition = glm::vec3(0.0, 60.0, -20.0);
 int lookAtIndex = 0;
 int zoomVal = 60;
+bool isPaused = false;
 //----------------------------------------------------------------
 
 //read in planet info
@@ -116,9 +116,8 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouse);//Called if there is mouse input
 	//glutCreateMenu(Menu);
 	int sub_menu = glutCreateMenu(Rotation_menu);
-	glutAddMenuEntry("Start CCW Rotation", 1);
-	glutAddMenuEntry("Start CLW Rotation", 2);
-	glutAddMenuEntry("Stop Rotation", 3);
+	glutAddMenuEntry("Go", 1);
+	glutAddMenuEntry("Pause", 2);
 	glutCreateMenu(top_menu);
 	glutAddSubMenu("Rotation options", sub_menu);
 	glutAddMenuEntry("Quit", 2);
@@ -204,18 +203,21 @@ void update()
     dt *= timeScale;
     float lerpTime = 0.45;
 
-    // update indep bodies
-    for (unsigned int i = 0; i < indepPlanets.size(); i++)
-        {
-         indepPlanets[i]->tick(dt);
-        }
+    if(!isPaused)
+      {
 
-    // update dep bodies
-    for (unsigned int j = 0; j < depPlanets.size(); j++)
-        {
-         depPlanets[j]->tick(dt);
+        // update indep bodies
+        for (unsigned int i = 0; i < indepPlanets.size(); i++)
+            {
+             indepPlanets[i]->tick(dt);
+            }
+
+        // update dep bodies
+        for (unsigned int j = 0; j < depPlanets.size(); j++)
+            {
+             depPlanets[j]->tick(dt);
+            }
         }
-    
     glm::vec3 planetPos = indepPlanets[lookAtIndex]->getPosition();
 
     cameraLookAt.x = lerp(cameraLookAt.x, planetPos.x, lerpTime);
@@ -313,13 +315,10 @@ void Rotation_menu(int id){
 	switch(id)
 		{
 		case 1: //ccw rotate
-			isRotate = M_PI/4;
+			isPaused = false;
 			break;
 		case 2: //clw rotate
-			isRotate =-M_PI/4;
-			break;
-		case 3: //stop rotate
-			isRotate = 0.0;
+			isPaused = true;
 			break;
 		}
 	glutPostRedisplay();
