@@ -246,7 +246,7 @@ void reshape(int n_w, int n_h)
     glViewport( 0, 0, w, h);
     //Update the projection matrix as well
     //See the init function for an explaination
-    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
+    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 1000.0f);
 
 }
 
@@ -443,8 +443,8 @@ bool initialize(int argc, char **argv)
 
     projection = glm::perspective( 45.0f, //the FoV typically 90 degrees is good which is what this is set to
                                    float(w)/float(h), //Aspect Ratio, so Circles stay Circular
-                                   0.1f, //Distance to the near plane, normally a small value like this
-                                   200.0f); //Distance to the far plane, 
+                                   0.01f, //Distance to the near plane, normally a small value like this
+                                   1000.0f); //Distance to the far plane, 
 
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
@@ -499,6 +499,7 @@ void readInPlanets(const char* fileName)
     int readInt = 0;
     int currentPlanet = 0;
     int numBodies;
+    int revScale = 5;
     
     //data in object is private, make functions or put in public??
     Object* planet;
@@ -570,7 +571,7 @@ void readInPlanets(const char* fileName)
 		            planet->planetData.radius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionRadius = readValue;
+		            planet->planetData.revolutionRadius = readValue * revScale;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
@@ -597,7 +598,7 @@ void readInPlanets(const char* fileName)
 		            planet->planetData.radius = readValue;
 		            file >> readObj;
 		            file >> readValue;
-		            planet->planetData.revolutionRadius = readValue;
+		            planet->planetData.revolutionRadius = readValue * revScale;
 		            file >> readObj;
 		            file >> readValue;
 		            planet->planetData.revolutionTilt = readValue;
