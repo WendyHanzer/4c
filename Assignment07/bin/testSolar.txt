@@ -34,11 +34,11 @@ earth
 
 moon
     isMoon 1
-    Self-spin .2
-    Revolution .2
+    Self-spin 3
+    Revolution 3
     Axial_tilt 0.0
     Radius .5
-    Revolution_radius 5
+    Revolution_radius .5
     Revolution_tilt_angle 0.0
     
 mars
@@ -106,8 +106,8 @@ pluto
 
 moon
     isMoon 1
-    Self-spin 0.156
-	Revolution 0.004032
+    Self-spin 0.56
+	Revolution 0.4
 	Axial_tilt 0.0
 	Radius .6
 	Revolution_radius .7
