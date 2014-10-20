@@ -5,7 +5,9 @@ Team Members
 ------------
 
 Charles Coulton
+
 Chris Forkner
+
 Niki Silveria
 
 Building This Example
