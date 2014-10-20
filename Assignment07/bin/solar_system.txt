@@ -1,3 +1,5 @@
+bodies 28
+
 sun
 	Self-spin .000166333999
 	Axial_tilt 7.25 
@@ -33,11 +35,12 @@ earth
 moon
 	isMoon 1
 	Self-spin .00015252
-	Axial_tilt 6.687
-	revolution -.000154321   
+	revolution -.000154321
+    Axial_tilt 6.687 
+    Radius 1737.5   
 	Revolution_radius 384000
 	Revolution_tilt_angle 6.687 
-	Radius 1737.5  
+	 
 
 mars
 	isMoon 0
@@ -48,7 +51,7 @@ mars
 	Revolution_radius 227925000 
 	Revolution_tilt_angle 5.65    
 
-demos
+deimos
 	isMoon 1
 	Self-spin 0.013065328 
 	Revolution 0.013065328  
@@ -127,12 +130,20 @@ saturn
 titan
 	isMoon 1
 	Self-spin .0029475
-	Revolution -.0029475   
+	Revolution .0029475   
 	Axial_tilt 0 
 	Radius 12.4 
 	Revolution_radius 294619 
-	Revolution_tilt_angle 1.19   
-
+	Revolution_tilt_angle 1.19 
+  
+tethus
+    isMoon 1
+	Self-spin .00034963
+	Revolution .00034963
+	Axial_tilt 0.0 
+	Radius 533.0
+	Revolution_radius 294619 
+	Revolution_tilt_angle 1.19 
 
 rhea
 	isMoon 1
@@ -159,8 +170,8 @@ dione
 	Axial_tilt 0 
 	Radius 14.1 
 	Revolution_radius 133584 
-	Revolution_tilt_angle 0  
-
+	Revolution_tilt_angle 0
+  
 uranus
 	isMoon 0
 	Self-spin -0.00580049095355430883669993828278 
@@ -170,23 +181,41 @@ uranus
 	Revolution_radius 2876679082.5 
 	Revolution_tilt_angle 6.48 
 
-prospero
+ariel
 	isMoon 1
-	Self-spin 0.0124365487283877656198077409059 
-	Revolution 0.0124365487283877656198077409059    
-	Axial_tilt 0 
-	Radius 20 
-	Revolution_radius 49751.7 
+	Self-spin .0004666
+	Revolution .0004666
+	Axial_tilt 0.0 
+	Radius  578.9
+	Revolution_radius  190900
 	Revolution_tilt_angle 0.08479  
 
-stephano
+umbriel
 	isMoon 1
-	Self-spin 0.0110694898293527447906980863066 
-	Revolution 0.0110694898293527447906980863066    
+	Self-spin .000767  
+	Revolution .000767  
 	Axial_tilt 0 
-	Radius 21.5 
-	Revolution_radius 53764 
-	Revolution_tilt_angle 0.093  
+	Radius  584.7
+	Revolution_radius 266000 
+	Revolution_tilt_angle 0.093
+  
+titania
+	isMoon 1
+	Self-spin .00161
+	Revolution .00161
+	Axial_tilt 0 
+	Radius  788.9
+	Revolution_radius 436300
+	Revolution_tilt_angle 0.0
+
+oberon
+	isMoon 1
+	Self-spin .00249
+	Revolution .00249  
+	Axial_tilt 0 
+	Radius 761.4 
+	Revolution_radius 583683
+	Revolution_tilt_angle  
 
 neptune
 	isMoon 0
@@ -199,32 +228,30 @@ neptune
 
 triton
 	isMoon 1
-	Self-spin 0.01417233560090702947845804988662 
-	Revolution -0.01417233560090702947845804988662    
-	Axial_tilt 0 
+	Self-spin .001088 
+	Revolution -.001088    
+	Axial_tilt 156.865 
 	Radius 1353 
-	Revolution_radius 35227 
+	Revolution_radius 354759 
 	Revolution_tilt_angle 4.746  
-
-thalassa
-	isMoon 1
-	Self-spin 0.01339764201500535905680600214362 
-	Revolution 0.01339764201500535905680600214362    
-	Axial_tilt 0 
-	Radius 41 
-	Revolution_radius 50075 
-	Revolution_tilt_angle 0.209  
 
 pluto
 	isMoon 0
 	Self-spin -.0011828
-	Revolution .0028406    
+	Revolution .00000046    
 	Axial_tilt 0 
 	Radius 1151 
-	Revolution_radius 590644628 
+	Revolution_radius 5906440628 
 	Revolution_tilt_angle 17.14 
 
-
+charon
+    isMoon 1
+	Self-spin .00118
+	Revolution .00118    
+	Axial_tilt 0 
+	Radius 603.6 
+	Revolution_radius 17536 
+	Revolution_tilt_angle 17.14
 
 
 
