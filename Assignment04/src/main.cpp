@@ -154,7 +154,7 @@ void render()
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,color));
 	//draw first obj
-    glDrawArrays(GL_TRIANGLES, 0, 2613921);//mode, starting index, count
+    glDrawArrays(GL_TRIANGLES, 0, NumToRender);//mode, starting index, count
 	
     //clean up
     glDisableVertexAttribArray(loc_position);
@@ -404,6 +404,7 @@ Object modelLoader(char *objName)
 	int faces[3];
 	char linetest;
 	char linetxt[250];
+	unsigned int NumTexV =0;
 	unsigned int NumVert, NumFaces = 0;
 	if (infile.is_open())
 		cout<<"File opened\n";
@@ -439,7 +440,9 @@ Object modelLoader(char *objName)
 	Output.name = new char[50];
 	Output.Geo = new Vertex[3*NumFaces];
 	Output.NumVert = 3*NumFaces;
-	
+	cout<<"Faces: "<<NumFaces<<endl;
+	cout<<"Verts: "<<NumVert<<endl;
+	cout<<"VertTex"<<NumTexV<<endl;
 	NumFaces = NumVert = 0;
 	while(infile.good()){
 		infile>>linetest;

@@ -1,0 +1,10 @@
+
+
+varying vec2 Tex_cord;
+
+uniform sampler2D glSample;
+
+
+void main(void){
+	gl_FragColor = texture2D(glSample, Tex_cord.xy);
+  	}

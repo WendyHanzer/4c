@@ -390,13 +390,21 @@ Object modelLoader(char *objName)
 	Object output;
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(objName, aiProcess_Triangulate);
-	const aiMesh *mesh = scene->mMeshes[0];
+	for (unsigned int NumMeshes = 0; NumMeshes < scene->mNumMeshes; NumMeshes++){
+	const aiMesh *mesh = scene->mMeshes[NumMeshes];
 	//output.name = mesh->mName;
+	if (mesh->HasVertexColors(0))
+		cout<<"Has colors"<<mesh->mColors[2]<<endl;
+	if (mesh->HasTextureCoords(0))
+		cout<<"Has Textures"<<endl;
+	cout<<mesh->mMaterialIndex<<endl;
+	//cout<<mesh->GetNumUVChannels()<<endl;
 	output.NumVert = mesh->mNumVertices;
 	output.Geo = new Vertex[output.NumVert];
 	for (unsigned int Index = 0; Index< output.NumVert; Index++){
 		output.Geo[Index] = {{mesh->mVertices[Index].x, mesh->mVertices[Index].y, mesh->mVertices[Index].z},{.2, 1.0, .7}};
 		//cout<<output.Geo[Index].position[0]<<":"<<output.Geo[Index].position[1]<<":"<<output.Geo[Index].position[2]<<endl;
 		}
+	}
 	return(output);
 	}

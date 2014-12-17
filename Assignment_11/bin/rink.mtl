@@ -1,0 +1,57 @@
+# Blender MTL File: ''
+# Material Count: 5
+newmtl _Chicago_Blackhawks_ice_rink_logo.png_combined.png.001_combined.png.001
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.409600 0.409600 0.409600
+Ks 0.800000 0.800000 0.800000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd iceRinkAssets/combined.png
+
+
+newmtl _Chicago_Blackhawks_ice_rink_logo.png_combined.png.001_combined_combined.png.002
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.409600 0.409600 0.409600
+Ks 0.800000 0.800000 0.800000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd iceRinkAssets/combined.png
+
+
+newmtl _combined.png_combined.png.002_combined.png.003
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.409600 0.409600 0.409600
+Ks 0.800000 0.800000 0.800000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd iceRinkAssets/combined.png
+
+
+newmtl _combined.png_combined.png.002_combined.png.003_combined.png.005
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.409600 0.409600 0.409600
+Ks 0.800000 0.800000 0.800000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd iceRinkAssets/combined.png
+
+
+newmtl _combined.png_combined.png.002_combined.png_combined.png.004
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.409600 0.409600 0.409600
+Ks 0.800000 0.800000 0.800000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd iceRinkAssets/combined.png
+
+

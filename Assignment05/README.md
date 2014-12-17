@@ -1,9 +1,9 @@
-Assignment05, Assimp loader
+Assignment06, Assimp textures
 
-Shaders and objects in command line, First is VS shader, second is FS shader, third is object to be loaded, colors not pulled.
+Shaders and objects in command line, First is VS shader, second is FS shader, third is object to be loaded. UV positions pulled, but wasn't able to put in the texture.
 
 I.E.
-./Assign4 shadervs.cg shaderfs.cg dragon.obj
+./Assign6 shadervs.cg shaderfs.cg dragon.obj
 
 
 Controls as follows:

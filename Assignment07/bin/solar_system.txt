@@ -96,9 +96,7 @@ callisto
 	Revolution_radius 671100 
 	Revolution_tilt_angle 0.47  
 
-ganymede
-	Self-spin 0
-	Revolution 0    
+ganymede    
 	isMoon 1
 	Self-spin .0013249166
 	Revolution .0013249166
@@ -107,9 +105,7 @@ ganymede
 	Revolution_radius 421800 
 	Revolution_tilt_angle 0.05  
 
-europa
-	Self-spin  0
-	Revolution 0    
+europa    
 	isMoon 1
 	Self-spin  .00065759259
 	Revolution .00065759259    
@@ -215,7 +211,7 @@ oberon
 	Axial_tilt 0 
 	Radius 761.4 
 	Revolution_radius 583683
-	Revolution_tilt_angle  
+	Revolution_tilt_angle 0.0
 
 neptune
 	isMoon 0
